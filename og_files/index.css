@@ -1,0 +1,175 @@
+@font-face {
+    font-family: rickAndMorty;
+    src: url(rickandmorty.ttf);
+}
+
+@keyframes fadeIn{
+  0% {opacity: 0; margin-top: 7.5%}
+  5% {opacity: .05;}
+  10% {opacity: .1;}
+  15% {opacity: .15;}
+  20% {opacity: .2;}
+  25% {opacity: .25;}
+  30% {opacity: .3;}
+  35% {opacity: .35;}
+  40% {opacity: .4;}
+  45% {opacity: .45;}
+  50% {opacity: .5;}
+  55% {opacity: .55;}
+  60% {opacity: .6;}
+  65% {opacity: .65;}
+  70% {opacity: .7;}
+  75% {opacity: .75;}
+  80% {opacity: .8;}
+  85% {opacity: .85;}
+  90% {opacity: .9;}
+  95% {opacity: .95;}
+  100% {opacity: 1;}
+}
+
+@keyframes fadeOut{
+  5% {opacity: .95;}
+  10% {opacity: .9;}
+  15% {opacity: .85;}
+  20% {opacity: .8;}
+  25% {opacity: .75;}
+  30% {opacity: .7;}
+  35% {opacity: .65;}
+  40% {opacity: .6;}
+  45% {opacity: .55;}
+  50% {opacity: .5;}
+  55% {opacity: .45;}
+  60% {opacity: .4;}
+  65% {opacity: .35;}
+  70% {opacity: .3;}
+  75% {opacity: .25;}
+  80% {opacity: .2;}
+  85% {opacity: .15;}
+  90% {opacity: .1;}
+  95% {opacity: .05;}
+  100% {opacity: 0;}
+}
+
+body{
+  margin: 0;
+  width: 100%;
+  background-image: url("images/background3.jpg");
+  position: fixed;
+}
+
+h1{
+  margin-top: 5%;
+  margin-left: 15%;
+  text-align: center;
+  font-size: 400%;
+  width: 70%;
+  line-height: 220%;
+  font-family: rickAndMorty;
+  color: #4badc8;
+  text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+  animation-name: fadeIn;
+  animation-duration: 1s;
+}
+
+.fadeIn{
+  animation-name: fadeIn;
+  animation-duration: .8s;
+}
+
+.fadeOut{
+  animation-name: fadeOut;
+  animation-duration: .8s;
+}
+
+#difficulty-title{
+  margin-top: 7.5%;
+  font-size: 300%;
+  text-align: center;
+  font-family: rickAndMorty;
+  color: #4badc8;
+  text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+  display: none;
+}
+
+#difficulty-buttons{
+  flex-direction: row;
+  width: 40%;
+  height: 30%;
+  margin-left: 30%;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+#difficulty-buttons > h3{
+  font-family: rickAndMorty;
+  color: #4badc8;
+  text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+  text-align: center;
+  font-size: 250%;
+  flex: 1;
+  padding: 20px;
+}
+
+#difficulty-buttons > h3:hover{
+  color: #7df24b;
+  text-shadow: -1px 0 #4badc8, 0 1px #4badc8, 1px 0 #4badc8, 0 -1px #4badc8;
+  text-align: center;
+  font-size: 280%;
+  flex: 1;
+  cursor: pointer;
+    padding-top: 6px;
+}
+
+#wrapper{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+tr{
+  display: flex;
+  flex-direction: row;
+}
+
+td{
+  text-align: center;
+  font-family: rickAndMorty;
+  color: #4badc8;
+  text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+  font-size: 180%;
+  border: 1px solid transparent;
+  margin: 0;
+  padding-bottom: 0;
+}
+
+td > div{
+  margin: auto;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+td > img{
+  width: 20;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+}
+
+td > img:hover{
+  width
+}
+
+.clickable:hover{
+  opacity: 0.5;
+}

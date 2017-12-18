@@ -1,0 +1,27 @@
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable = yes" />
+    <title>Rick and Morty Minesweeper</title>
+
+    <link rel="stylesheet" href="index.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+  </head>
+
+  <body>
+    <h1 id="title">Look at this, Morty, I put us in a game, it's Minesweeper Morty, it's fucking awesome</h1>
+    <h2 id="difficulty-title">Select your difficulty</h2>
+    <div id="difficulty-buttons">
+      <h3 onclick="generateField('e')">Easy</h3>
+      <h3 onclick="generateField('m')">Medium</h3>
+      <h3 onclick="generateField('h')">Hard</h3>
+    </div>
+    <div id="wrapper">
+      <div id="grid">
+      </div>
+    </div>
+  </body>
+
+</html>
