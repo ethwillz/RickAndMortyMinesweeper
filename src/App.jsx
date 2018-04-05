@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import _ from 'lodash'
 import portal from './images/portal.png';
 import plumbus from './images/plumbus.png';
+import pickleRick from './images/picklerick.png';
 import './App.css';
 
 /*
@@ -43,7 +45,7 @@ class Board extends App {
       cursor: 'pointer',
       position: 'absolute',
     }
-    let spaceStyle = {
+    const spaceStyle = {
       height: 70 / size + 'vh',
       width: 70 / size + 'vh',
       display: 'flex',
@@ -63,18 +65,22 @@ class Board extends App {
     for(let i = 0; i < size; i++){
       for(let j = 0; j < size; j++){
         let bombsAround = this.checkForBombs(bombSpaces, size, i, j);
-        spaces[i][j] = <Space
-          img = {portal}
-          hasBomb = {bombSpaces[i][j]}
-          bombsTouching = {bombsAround}
-          spaceStyle = {spaceStyle}
-          portalStyle = {portalStyle}
-          h2Style = {{display: 'none'}}/>;
+          spaces[i][j] = <Space
+            id = {i * size + j}
+            img = {portal}
+            hasBomb = {bombSpaces[i][j]}
+            bombsTouching = {bombsAround}
+            spaceStyle = {spaceStyle}
+            portalStyle = {portalStyle}
+            h2Style = {{display: 'none'}}
+            propogateZeros = {this.propogateZeros.bind(this)}/>;
       }
     }
 
     this.state = {
-      spaces
+      spaces,
+      size,
+      spaceStyle
     };
   }
 
@@ -91,6 +97,34 @@ class Board extends App {
       if(i > 0 && j > 0 && spaces[i-1][j-1]) bombsTouching++;
 
       return bombsTouching;
+  }
+
+  propogateZeros(spaceId){
+    let spaces = this.state.spaces.map((item, i) => {
+      return item.map((space, j) => Object.assign({}, space));
+    });
+    console.log(spaces);
+    console.log(this.state.spaces);
+    let startRow = parseInt(spaceId / this.state.size);
+    let startColumn = spaceId % this.state.size;
+    for(let i = startRow + 1; i < this.state.size; i++){
+      if(spaces[i][startColumn].props.bombsTouching === 0){
+        spaces[i][startColumn] = <Space
+          id = {spaces[i][startColumn].props.id}
+          img = {spaces[i][startColumn].props.img}
+          hasBomb = {spaces[i][startColumn].props.hasBomb}
+          bombsTouching = {spaces[i][startColumn].props.bombsTouching}
+          spaceStyle = {spaces[i][startColumn].props.portalStyle}
+          portalStyle = {{display: 'none'}}
+          h2Style = {{display: 'hidden'}}
+          propogateZeros = {spaces[i][startColumn].props.propogateZeros}/>;
+      }
+      //else{ break; }
+    }
+
+    this.setState({
+      spaces: [spaces]
+    });
   }
 
   render () {
@@ -116,7 +150,10 @@ class Board extends App {
 class Space extends Component {
   constructor(props){
     super(props);
+    this.onClick = this.onClick.bind(this);
+
     this.state = {
+      id: props.id,
       img: props.img,
       onClick: props.onClick,
       hasBomb: props.hasBomb,
@@ -124,29 +161,27 @@ class Space extends Component {
       portalStyle: props.portalStyle,
       h2Style: props.h2Style,
       bombsTouching: props.bombsTouching,
-      updateBombs: function(numBombs){
-        this.setState({bombsTouching: numBombs})
-      }
+      propogateZeros: props.propogateZeros,
     }
-
-    this.onClick = this.onClick.bind(this);
   }
 
   onClick(){
-    console.log(this.state.hasBomb);
     if(this.state.hasBomb){
-      console.log("hello");
       this.setState({
-        img: plumbus,
-        //h2Style: {display: 'none'},
+        img: pickleRick,
+        h2Style: {display: 'none'},
       });
+
+      //animate losing
     }
 
     if(this.state.bombsTouching === 0){
       this.setState({
         portalStyle: {display: 'none'},
-        //h2Style: {display: 'none'},
-      });
+        h2Style: {display: 'none'},
+      }, () => this.props.propogateZeros(this.state.id));
+
+      //check for win
     }
 
     if(!this.state.hasBomb && this.state.bombsTouching !== 0){
@@ -154,6 +189,8 @@ class Space extends Component {
         portalStyle: {display: 'none'},
         h2Style: {display: 'block'},
       });
+
+      //check for win
     }
   }
 
@@ -166,7 +203,7 @@ class Space extends Component {
           onClick={this.onClick}
           style={this.state.portalStyle}>
         </img>
-        <h2 style={{display: 'hidden', positon: 'absolute'}}>
+        <h2 style={this.state.h2Style}>
           {this.state.bombsTouching}
         </h2>
       </div>
