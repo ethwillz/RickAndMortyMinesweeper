@@ -4,7 +4,6 @@ node_js:
 - 6
 - 5
 script:
-- node ./internals/scripts/generate-templates-for-linting
 - npm run test
 - npm run build
 before_install:
@@ -13,7 +12,7 @@ before_install:
 - sh -e /etc/init.d/xvfb start
 deploy:
   provider: firebase
-  skip_cleanup: false
+  skip_cleanup: true
   token:
     secure: '1/ITN_Uiu7a6uaVATsrHmDlWCcr4XaQN4B8L2Isab3igWXuDgbuAiqQ6kRuCRSPYeD'
 notifications:
