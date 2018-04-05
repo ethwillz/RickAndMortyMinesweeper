@@ -1,27 +1,32 @@
 language: node_js
-
 node_js:
-  - 7
-  - 6
-  - 5
-
+- 7
+- 6
+- 5
 script:
-  - node ./internals/scripts/generate-templates-for-linting
-  - npm run test
-  - npm run build
-
+- node ./internals/scripts/generate-templates-for-linting
+- npm run test
+- npm run build
 before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-
+- export CHROME_BIN=chromium-browser
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+deploy:
+  provider: firebase
+  skip_cleanup: false
+  token:
+    secure: '1/ITN_Uiu7a6uaVATsrHmDlWCcr4XaQN4B8L2Isab3igWXuDgbuAiqQ6kRuCRSPYeD'
 notifications:
   email:
     on_failure: change
-
-after_success: 'npm run coveralls'
-
+after_success: npm run coveralls
 cache:
   yarn: true
   directories:
-    - node_modules
+  - node_modules
+env:
+  global:
+  - secure: plM3V34IdpksjLSKEeKXeqwg1VAueV+s6/9+6I3l+whsCBDUBtN9sWGK+HOq5m90BsOrOZCa/Z3i7jFEQpXWBeoBzStYPt7B5In6P58xKK8dGx6tV4SsEn18j2xz+EFRSwnys2zkobFSlZFs1OEUoJmQB4LawYSkM63x6J2FWlTsWu+5HB4X019aTJQ1aobCKNwY8IXbBLHI/FXZybAxzMuXH0DPKirschG04c40WLkVUMXbxxbVYzWy+7FHt4AAQ+anYKz5w4+oqKmABFpdhcc4zOvllhvdwO81KGGwV8EgxbwAsPFfBR3VQ3kw04OKi5TQHEsV/gkmX3LeRtq0OffWSixGuVHbk5MuPZ7uLWF6xKG/Dj8L4Ad+68Sqw8RQeFpW3NFB4SKNwQaCg086v/sbBoXspEciNIEplxN12jbUoMpZQhwbd/Gu2MshiDyAPhAELQc5vAQCeFxFBB0hv40MZB0DUR/QB8XSgYg299BBMB1BWd2abYYYvlFHuXEu7crp/FdeDOnpK1JzNTfi95cviIUfhsK+swabc4Uz7vEeD1tuAS+52jjzJwcJ8fTPHkebnq1/BpfBjC3dS0dL+fp/RwnMa7PZHZNWV5okC3jk8wAvwQwUyya75ye4T2+KubcC908UWUCaTq9+S/n0+IvWWx6ZUPyQDMgTsyeAuMk=
+  - secure: c2HVzKqvj6snevS0KFfdey4UkVqF+AfW5FE15gFXag3QSMd0zoPhGldxyZaSADujd2sIx4+R+fG0yBS7k7qtKfmocO+FGst1RNW6UsZhDLCAyvKHAn5Gmq2ScGB0jgzlHGxImZfJMUsEZNFqODRAxxouG2bPnGwUs5fh/NWvQLKbweaq0Q1UXqrup+Zee6RrJa10ihnm1ilTqTQwndEJ3ZujUHtOlqLabSW1xas0eE1MhfmBd405zYWzi7nq1+XvdM053S6yC0tkEmxE42tRAlLsKo9XwA7tqUeOWuQbYre+hQex4AN68LmQR/ClVwBoSisyafGpOF9LnIVsH+lCt9uABzj/r2ER3uuuydnNR8q/zW7LN0ihteVbV7AdYHWiUzBSf2aq1hGJTru8Zx1JXwUI1s6Prtrwj7e0tg/gWAG4hTvNZEw/hDCR+5Jr0DGCPdU6PtWRBRzRZo0j+al5nDu2gK8HOp2EkRUVI9/5oOlILwfaenhjhmo1upGbzxDY1O/iKnzMZmG8sDe5sP3CRYtYXP54lv/c+Dj0lci3RmwQmhWBdDjdWZtR7CJvngxtFwgOvo6rsj5+pYuT8thaB44LFYDV877KlpS10qwpJTdIDeM8zgTsWEUzQCvWvFUxnzdSKHhL1fxufz2yLyf8n+wfaKAdfVl6+ImsfmKP+KU=
+  - secure: Hfk5FrPvR7QHS9yzRt3V6SBi+2ihIg3OIGL4f6HV5YXdTOV9G+d8dejLxOTdiQa/+i6Pqk9qBOW6cXoC7JIzVdPmSlhap+UMPxW39N6ps9CrBoqvJpAf93Etx78jePeQdTNnvEelfYx7oBdDCIwyci9WgzaG7DYSyeUoCN5/8CDbYQA9xVYLHnUUafzX0/Xemn5ZfCdPRM1HVSjBuOhtXCRmtb3uG7gUQCGExytHWUdt1Dx2BOaq1lBwLzx3PoDKGd+QXzemNGMqsPaSmVkHJfLbcLuwY/m8u4ULjLqsRI2mh3/Wayr4lanILwH0DKufH4RrvK48RB+YToZDUNCcXq+KvIm1u9w29Xa8J0JRBHbaj8Mxc3KP9IuDNo0AqxxzpC13f/42gkzQqW4OU3hU6u4CsO+iYoXtgX8Cu5Gn/SA6FMKyWTaYVpzSV8K/39zAm5BDZuk9wf0qo48Vdgp/4vbZrgOdd69Bzaf4fC5+vYHeJn/vUjzVlqSsS9QYs62CeGl9+bnTCL3JrdlOZrSR9J9LYRAj4CsuYMS3R7BDsYGtYTXbWhjkDJiv0axr1Kq1Zes/U5GYL/30HdcitM6d9+V15DYNRuhIpBXJrvVwctiWTBKvJlT0aPB4EkMpGCcasNoLFSlO3LpbXEzqtqhkFKJHQRAoaYXqK9V6X0qgOkw=
+  - secure: aybF6JEl5lKRL08IbgpG8s7oup21X9QalbsXZPLnfy7TPVfrF+GhDbCltssXsYlkyAnNRSVhZ2fGMzchFYAbmqC4ajiyvRbIY9FsMDJoS0MiR2kUh9HW9+nJKVEhi0BBxhToHkYCHUKTGeCVDaK5b4mu2HD6n8ovt8RbDcFV2lUBpzB9/aUtxXsVXiXibfP5afbFUdohRAEiAcKPAmghP5wHNG0WQI5HttlNtVIGCkhDASm3tnoY0KAiSWKwY6QSlwOsNKjby5EUAmAcdvSKqPdOueqYNLCovXTuXo/zJxCjv1U1qgeozsXEeOc1LxQyONgK1BlaMUczE0y+GKfD75iAbA2E3q3LQ96o33k3y+EKWH6yS9oQeXEe9aQrYRBJKfDl0Fw2L0wgtKSovTtLtkybbDsvs4YjfHcoRP7v45D9hVTSib1npYppXvgGGJxVfrZEVTCTi7oKswJMgUrxG7bSw4vhZ85auzrcCjIQxzhef2uWVujwuQanDo03idwnpaqz4cOF+571q4ER6dC3I0Gr61wgzwLHP+pEzzcYYBLGJ4wc6B/SffTQ7Qlg5xTnGT/n5RvlswuXT/mqYFuMCNODPzS2mmlsW8ipEM02FvOC+0P/th8RDN3aJq1YG0L5FqcnO9dx+BdkiVvK4Z01hUPNdkFxN4YMZaHNjOFPKu4=
