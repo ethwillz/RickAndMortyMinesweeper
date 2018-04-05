@@ -1,9 +1,15 @@
+@font-face {
+    font-family: rickAndMorty;
+    src: url(rickandmorty.ttf);
+}
+
 .App {
   text-align: center;
 }
 
 body{
   height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,7 +17,13 @@ body{
   background-image: url("images/background.jpg");
 }
 
-@font-face {
-    font-family: rickAndMorty;
-    src: url(rickandmorty.ttf);
+td{
+  text-align: center;
+  font-family: rickAndMorty;
+  color: #4badc8;
+  text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+  font-size: 180%;
+  border: 1px solid transparent;
+  margin: 0;
+  padding-bottom: 0;
 }
