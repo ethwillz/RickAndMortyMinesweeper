@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { createStore } from 'redux';
 import _ from 'lodash';
-import {PortalSpace, BombSpace} from './Spaces.jsx';
+import {PortalSpace, BombSpace} from './Spaces';
 import './Board.css';
+import game from './reducers';
+const store = createStore(game);
 
 /*
   EASY: 15% 8x8
