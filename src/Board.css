@@ -3,7 +3,7 @@
     src: url(rickandmorty.ttf);
 }
 
-.App {
+.Board {
   text-align: center;
 }
 
@@ -17,7 +17,7 @@ body{
   background-image: url("images/background.jpg");
 }
 
-td{
+.Space{
   text-align: center;
   font-family: rickAndMorty;
   color: #4badc8;
