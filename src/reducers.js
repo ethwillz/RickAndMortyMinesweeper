@@ -1,9 +1,13 @@
 import { combineReducers } from 'redux';
-import {CLICK_BOMB, CLICK_ZERO, CLICK_NUM} from './actions';
+import { SPACE_CLICK } from './actions';
 
-function click(state = [], action){
+/*
+  DISCLAIMER: THIS IS EXPERIMENTATION I HAVE NO FUCKING CLUE HOW TO USE REDUX
+*/
+
+function space_click(state = [], action){
   switch(action.type){
-    case CLICK_BOMB:
+    case SPACE_CLICK:
       return [
         ...state,
         {

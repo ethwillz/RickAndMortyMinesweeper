@@ -40,6 +40,15 @@ class Board extends Component {
     for(let i = 0; i < size; i++){
       for(let j = 0; j < size; j++){
         if(Math.random() < lim){
+          store.subscribe(() => {
+            let prevState = store.getState();
+
+            // alter state based on bomb click event?
+
+            let newState = prevState; // Yes I know this is pointless, placeholder
+
+            return newState;
+          });
           let id = idGenerator++;
           spaces[i][j] = <BombSpace
             key = {id}

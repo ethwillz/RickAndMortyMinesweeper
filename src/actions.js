@@ -1,15 +1,9 @@
-export const CLICK_BOMB = 'CLICK_BOMB';
-export const CLICK_ZERO = 'CLICK_ZERO';
-export const CLICK_NUM = 'CLICK_NUM';
+export const SPACE_CLICK = 'SPACE_CLICK';
 
-export function clickBomb(img){
-  return { type: CLICK_BOMB, img };
-}
+/*
+  DISCLAIMER: THIS IS EXPERIMENTATION I HAVE NO FUCKING CLUE HOW TO USE REDUX
+*/
 
-export function clickZero(){
-  return {type: CLICK_ZERO };
-}
-
-export function clickNum(){
-  return { type: CLICK_NUM };
+export function spaceClick(img){
+  return { type: SPACE_CLICK, img };
 }
