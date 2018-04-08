@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Space from './Space';
 
-const Board = ({spaces}) => (
+const GameBoard = ({spaces}) => (
   <div>
     <table>
       <tbody>
@@ -12,17 +11,17 @@ const Board = ({spaces}) => (
   </div>
 )
 
-Board.propTypes = {
+GameBoard.propTypes = {
   spaces: PropTypes.arrayOf(
     PropTypes.arrayOf(
       PropTypes.shape({
-        imgSrc: PropTypes.string.isRequired,
-        nuBombs: PropTypes.number.isRequired,
-        hasPlumbus: PropTypes.bool.isRequired,
+        numBombs: PropTypes.number.isRequired,
+        boardDimension: PropTypes.string.isRequired,
+        spaceState: PropTypes.string.isRequired,
+        onClick: PropTypes.func.isRequired,
       }).isRequired
     ).isRequired
   ).isRequired,
-  onSpaceClick: PropTypes.func.isRequired,
 }
 
-export default Board;
+export default GameBoard;
