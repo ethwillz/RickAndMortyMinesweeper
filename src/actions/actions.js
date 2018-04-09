@@ -4,13 +4,15 @@ export const SpaceStates = {
   IS_NORMAL: 'IS_NORMAL',
   IS_FLAGGED: 'IS_FLAGGED',
   IS_NUMBER: 'IS_NUMBER',
+  IS_COVERED_BOMB: 'IS_COVERED_BOMB',
   IS_BOMB: 'IS_BOMB',
 }
 
-export function setSpaceState(id, spaceState){
+export function setSpaceState(id, size, spaceState){
   return {
     type: SET_SPACE_STATE,
     id,
+    size,
     spaceState };
 }
 

@@ -3,67 +3,77 @@ import PropTypes from 'prop-types';
 import plumbus from '../images/plumbus.png';
 import portal from '../images/portal.png';
 import picklerick from '../images/picklerick.png'
-import SpaceStyles from '../actions/actions'
+import { SpaceStates } from '../actions/actions'
 
 export default class Space extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick(){ this.props.onSpaceClick(); }
+
   render(){
     let props = this.props;
 
-    let isNormal = 'none', isBomb = 'none', isNumber = 'none', isFlagged = 'none';
-    if(props.spaceStyle === SpaceStyles.IS_NORMAL) isNormal = 'block';
-    if(props.spaceStyle === SpaceStyles.IS_BOMB) isBomb = 'block';
-    if(props.spaceStyle === SpaceStyles.IS_NUMBER && props.numBombs !== 0) isNumber = 'block';
-    if(props.spaceStyle === SpaceStyles.IS_FLAGGED) isFlagged = 'block';
+    let isNormal = 'none'
+    let isBomb = 'none'
+    let isNumber = 'none'
+    let isFlagged = 'none';
+    if(props.spaceState === SpaceStates.IS_NORMAL
+      || props.spaceState === SpaceStates.IS_COVERED_BOMB) isNormal = 'block';
+    if(props.spaceState === SpaceStates.IS_BOMB) isBomb = 'block';
+    if(props.spaceState === SpaceStates.IS_NUMBER && props.numBombs !== 0) isNumber = 'flex';
+    if(props.spaceState === SpaceStates.IS_FLAGGED) isFlagged = 'block';
 
     let imgStyle = {
-      width: props.boardDimension,
-      height: props.boardDimension,
+      width: 70 / props.boardSize + 'vh',
+      height: 70 / props.boardSize + 'vh',
       cursor: 'pointer',
-      position: 'absolute'
     }
 
     let divStyle = {
-      height: props.boardDimension,
-      width: props.boardDimension,
+      height: 70 / props.boardSize + 'vh',
+      width: 70 / props.boardSize + 'vh',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      position: 'relative',
     }
 
     return (
-      <td>
-        <div
-          style={divStyle && {display: isNormal}}
-          onClick = {props.onClick} >
+      <td
+        onClick={this.onClick}
+        style={{...divStyle}} >
+        <div style={{...divStyle, display: isNormal}} >
           <img
             src = {portal}
             alt = 'bs'
             style = {imgStyle} />
         </div>
-        <div
-          style={divStyle && {display: isFlagged}}
-          onClick = {props.onClick} >
+        <div style={{...divStyle, display: isFlagged, position: 'relative'}} >
           <img
             src = {plumbus}
             alt = 'bs'
-            style = {imgStyle} />
+            style = {{...imgStyle, position: 'absolute'}} />
           <img
             src = {portal}
             alt = 'bs'
-            style = {imgStyle} />
+            style = {{...imgStyle, position: 'absolute'}} />
         </div>
-        <div
-          style={divStyle && {display: isNumber}}
-          onClick = {props.onClick} >
-          <h2
-            style = {{position: 'absolute'}} >
+        <div style={{
+            ...divStyle,
+            display: isNumber,
+            color: '#4badc8',
+            textShadow: '-1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b',
+            paddingBottom: 0,
+            fontSize: '180%',
+          }} >
+          <h2 style={{margin: 0, textAlign: 'center'}} >
             {props.numBombs}
           </h2>
         </div>
-        <div
-          style={divStyle && {display: isBomb}}
-          onClick = {props.onClick} >
+        <div style={{...divStyle, display: isBomb}} >
           <img
             src = {picklerick}
             alt = 'bs'
@@ -76,7 +86,7 @@ export default class Space extends React.Component{
 
 Space.propTypes = {
   numBombs: PropTypes.number.isRequired,
-  boardDimension: PropTypes.string.isRequired,
+  boardSize: PropTypes.number.isRequired,
   spaceState: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onSpaceClick: PropTypes.func.isRequired,
 };

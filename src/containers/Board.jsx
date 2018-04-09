@@ -1,22 +1,11 @@
-import { connect } from 'react-redux';
-import GameBoard from './Board_p';
-import { setSpaceState } from './actions/actions';
+import { connect} from 'react-redux';
+import Board from '../components/Board';
 
-const mapStateToProps = (state, ownProps) => {
-  return state.spaces;
+const mapStateToProps = (state) => {
+  return { spaces: state.spaces }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onSpaceClick: id => {
-      dispatch(setSpaceState(id))
-    }
-  }
-}
-
-const Board = connect(
+export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(GameBoard)
-
-export default Board;
+  null
+)(Board)

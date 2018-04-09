@@ -1,22 +1,26 @@
 import { connect } from 'react-redux';
-import BoardSpace from '../components/Space';
-import { setSpaceState } from '../actions/actions';
-
-const mapStateToProps = (state, ownProps) => {
-  return state; 
-}
+import Space from '../components/Space';
+import { SpaceStates, setSpaceState } from '../actions/actions';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClick: id => {
-      dispatch(setSpaceState(id, ownProps.spaceState))
+    onSpaceClick: id => {
+      let spaceStateToSend = ownProps.spaceState;
+      if(ownProps.spaceState === SpaceStates.IS_NORMAL){
+          spaceStateToSend = SpaceStates.IS_NUMBER;
+      }
+      else if(ownProps.spaceState === SpaceStates.IS_COVERED_BOMB){
+        spaceStateToSend = SpaceStates.IS_BOMB;
+        //something to end game
+      }
+      //handle right clicks for putting plumbuses on and off
+
+      dispatch(setSpaceState(ownProps.id, ownProps.boardSize, spaceStateToSend));
     }
   }
 }
 
-const Space = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BoardSpace)
-
-export default Space;
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Space)
