@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Space from '../components/Space';
 import { SpaceStates, setSpaceState } from '../actions/actions';
+import { withRouter } from 'react-router-dom';
 
 function loss(){
   alert("You lose");
@@ -24,7 +25,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   null,
   mapDispatchToProps,
-)(Space)
+))(Space)
