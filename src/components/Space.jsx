@@ -19,25 +19,22 @@ export default class Space extends React.Component{
 
   render(){
     let props = this.props;
+    let boardDimension = 70 / props.boardSize + 'vh';
 
-    let isCovered = 'none';
-    let isBomb = 'none';
-    let isNumber = 'none';
-    let isFlagged = 'none'
-    if(props.spaceState === SpaceStates.IS_COVERED) isCovered = 'block';
-    if(props.spaceState === SpaceStates.IS_UNCOVERED && props.hasBomb) isBomb = 'block';
-    if(props.spaceState === SpaceStates.IS_UNCOVERED && props.adjacentBombs > 0) isNumber = 'block';
-    if(props.spaceState === SpaceStates.IS_FLAGGED) isFlagged = 'flex';
+    let isCovered = props.spaceState === SpaceStates.IS_COVERED ? 'block' : 'none';
+    let isBomb = props.spaceState === SpaceStates.IS_UNCOVERED && props.hasBomb ? 'block' : 'none';
+    let isNumber = props.spaceState === SpaceStates.IS_UNCOVERED && props.adjacentBombs > 0 ? 'block' : 'none';
+    let isFlagged = props.spaceState === SpaceStates.IS_FLAGGED ? 'flex' : 'none';
 
     let imgStyle = {
-      width: 70 / props.boardSize + 'vh',
-      height: 70 / props.boardSize + 'vh',
+      width: boardDimension,
+      height: boardDimension,
       cursor: 'pointer',
     }
 
     let divStyle = {
-      height: 70 / props.boardSize + 'vh',
-      width: 70 / props.boardSize + 'vh',
+      height: boardDimension,
+      width: boardDimension,
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',

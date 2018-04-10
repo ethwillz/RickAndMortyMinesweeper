@@ -5,6 +5,8 @@ import Space from '../containers/Space'
 /*
   Implements the functionality of minesweeper where if a space not touching bombs
   is clicked and the adjacent spaces that are 0 are revealed
+
+  NEEDS WORK, ONLY CHECKS TILL FAILURE IN EACH OF 8 DIRECTIONS
 */
 function propogateZeros(id, spaces, state, y, x){
   let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]

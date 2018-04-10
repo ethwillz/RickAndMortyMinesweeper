@@ -25,7 +25,7 @@ function checkForBombs(spaces, size, i, j){
   if(i < size - 1
     && j < size - 1
     && spaces[i+1][j+1]
-    && spaces[i+1][j+1].props.hasBombB) bombsTouching++;
+    && spaces[i+1][j+1].props.hasBomb) bombsTouching++;
   if(i < size - 1
     && spaces[i+1][j]
     && spaces[i+1][j].props.hasBomb) bombsTouching++;
