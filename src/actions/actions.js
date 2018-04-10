@@ -1,11 +1,9 @@
 export const SET_SPACE_STATE = 'SET_SPACE_STATE';
 
 export const SpaceStates = {
-  IS_NORMAL: 'IS_NORMAL',
+  IS_COVERED: 'IS_COVERED',
   IS_FLAGGED: 'IS_FLAGGED',
-  IS_NUMBER: 'IS_NUMBER',
-  IS_COVERED_BOMB: 'IS_COVERED_BOMB',
-  IS_BOMB: 'IS_BOMB',
+  IS_UNCOVERED: 'IS_UNCOVERED',
 }
 
 export function setSpaceState(id, size, spaceState){

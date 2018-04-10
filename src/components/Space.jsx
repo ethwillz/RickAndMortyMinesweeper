@@ -12,20 +12,22 @@ export default class Space extends React.Component{
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick(){ this.props.onSpaceClick(); }
+  onClick(e){
+    e.preventDefault();
+    this.props.onSpaceClick(e, this.props.id);
+  }
 
   render(){
     let props = this.props;
 
-    let isNormal = 'none'
-    let isBomb = 'none'
-    let isNumber = 'none'
-    let isFlagged = 'none';
-    if(props.spaceState === SpaceStates.IS_NORMAL
-      || props.spaceState === SpaceStates.IS_COVERED_BOMB) isNormal = 'block';
-    if(props.spaceState === SpaceStates.IS_BOMB) isBomb = 'block';
-    if(props.spaceState === SpaceStates.IS_NUMBER && props.numBombs !== 0) isNumber = 'flex';
-    if(props.spaceState === SpaceStates.IS_FLAGGED) isFlagged = 'block';
+    let isCovered = 'none';
+    let isBomb = 'none';
+    let isNumber = 'none';
+    let isFlagged = 'none'
+    if(props.spaceState === SpaceStates.IS_COVERED) isCovered = 'block';
+    if(props.spaceState === SpaceStates.IS_UNCOVERED && props.hasBomb) isBomb = 'block';
+    if(props.spaceState === SpaceStates.IS_UNCOVERED && props.adjacentBombs > 0) isNumber = 'block';
+    if(props.spaceState === SpaceStates.IS_FLAGGED) isFlagged = 'flex';
 
     let imgStyle = {
       width: 70 / props.boardSize + 'vh',
@@ -44,8 +46,9 @@ export default class Space extends React.Component{
     return (
       <td
         onClick={this.onClick}
+        onContextMenu={this.onClick}
         style={{...divStyle}} >
-        <div style={{...divStyle, display: isNormal}} >
+        <div style={{...divStyle, display: isCovered}} >
           <img
             src = {portal}
             alt = 'bs'
@@ -53,11 +56,11 @@ export default class Space extends React.Component{
         </div>
         <div style={{...divStyle, display: isFlagged, position: 'relative'}} >
           <img
-            src = {plumbus}
+            src = {portal}
             alt = 'bs'
             style = {{...imgStyle, position: 'absolute'}} />
           <img
-            src = {portal}
+            src = {plumbus}
             alt = 'bs'
             style = {{...imgStyle, position: 'absolute'}} />
         </div>
@@ -70,7 +73,7 @@ export default class Space extends React.Component{
             fontSize: '180%',
           }} >
           <h2 style={{margin: 0, textAlign: 'center'}} >
-            {props.numBombs}
+            {props.adjacentBombs}
           </h2>
         </div>
         <div style={{...divStyle, display: isBomb}} >
@@ -85,7 +88,8 @@ export default class Space extends React.Component{
 }
 
 Space.propTypes = {
-  numBombs: PropTypes.number.isRequired,
+  adjacentBombs: PropTypes.number.isRequired,
+  hasBomb: PropTypes.bool.isRequired,
   boardSize: PropTypes.number.isRequired,
   spaceState: PropTypes.string.isRequired,
   onSpaceClick: PropTypes.func.isRequired,

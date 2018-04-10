@@ -2,18 +2,22 @@ import { connect } from 'react-redux';
 import Space from '../components/Space';
 import { SpaceStates, setSpaceState } from '../actions/actions';
 
+function loss(){
+  alert("You lose");
+}
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onSpaceClick: id => {
+    onSpaceClick: (e, id) => {
       let spaceStateToSend = ownProps.spaceState;
-      if(ownProps.spaceState === SpaceStates.IS_NORMAL){
-          spaceStateToSend = SpaceStates.IS_NUMBER;
+      if(e.type === 'contextmenu'){
+        if(ownProps.spaceState === SpaceStates.IS_COVERED) spaceStateToSend = SpaceStates.IS_FLAGGED;
+        else if(ownProps.spaceState === SpaceStates.IS_FLAGGED) spaceStateToSend = SpaceStates.IS_COVERED;
       }
-      else if(ownProps.spaceState === SpaceStates.IS_COVERED_BOMB){
-        spaceStateToSend = SpaceStates.IS_BOMB;
-        //something to end game
+      else if(ownProps.spaceState === SpaceStates.IS_COVERED){
+        spaceStateToSend = SpaceStates.IS_UNCOVERED;
+        if(ownProps.hasBomb) setTimeout(loss, 250);
       }
-      //handle right clicks for putting plumbuses on and off
 
       dispatch(setSpaceState(ownProps.id, ownProps.boardSize, spaceStateToSend));
     }

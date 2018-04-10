@@ -14,32 +14,32 @@ function checkForBombs(spaces, size, i, j){
 
   if(i > 0
     && spaces[i-1][j]
-    && spaces[i-1][j].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i-1][j].props.hasBomb) bombsTouching++;
   if(i > 0
     && j < size - 1
     && spaces[i-1][j+1]
-    && spaces[i-1][j+1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i-1][j+1].props.hasBomb) bombsTouching++;
   if(j < size - 1
     && spaces[i][j+1]
-    && spaces[i][j+1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i][j+1].props.hasBomb) bombsTouching++;
   if(i < size - 1
     && j < size - 1
     && spaces[i+1][j+1]
-    && spaces[i+1][j+1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i+1][j+1].props.hasBombB) bombsTouching++;
   if(i < size - 1
     && spaces[i+1][j]
-    && spaces[i+1][j].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i+1][j].props.hasBomb) bombsTouching++;
   if(i < size - 1
     && j > 0
     && spaces[i+1][j-1]
-    && spaces[i+1][j-1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i+1][j-1].props.hasBomb) bombsTouching++;
   if(j > 0
     && spaces[i][j-1]
-    && spaces[i][j-1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i][j-1].props.hasBomb) bombsTouching++;
   if(i > 0
     && j > 0
     && spaces[i-1][j-1]
-    && spaces[i-1][j-1].props.spaceState === SpaceStates.IS_COVERED_BOMB) bombsTouching++;
+    && spaces[i-1][j-1].props.hasBomb) bombsTouching++;
 
   return bombsTouching;
 }
@@ -66,13 +66,13 @@ let spaces = Array(size).fill(0).map(row => new Array(size).fill(false));
 for(let i = 0; i < size; i++){
   for(let j = 0; j < size; j++){
     if(Math.random() < lim){
-      let key = idGenerator++;
       spaces[i][j] = <Space
         id={i * size + j}
-        key={key}
-        numBombs={0}
+        key={idGenerator++}
+        adjacentBombs={0}
+        hasBomb={true}
         boardSize={size}
-        spaceState={SpaceStates.IS_COVERED_BOMB} />
+        spaceState={SpaceStates.IS_COVERED} />
     }
   }
 }
@@ -80,14 +80,14 @@ for(let i = 0; i < size; i++){
 for(let i = 0; i < size; i++){
   for(let j = 0; j < size; j++){
     if(spaces[i][j] === false){
-      let bombsTouching = checkForBombs(spaces, size, i, j);
-      let key = idGenerator++;
+      let adjacentBombs = checkForBombs(spaces, size, i, j);
       spaces[i][j] = <Space
         id={i * size + j}
-        key={key}
-        numBombs={bombsTouching}
+        key={idGenerator++}
+        adjacentBombs={adjacentBombs}
+        hasBomb={false}
         boardSize={size}
-        spaceState={SpaceStates.IS_NORMAL} />
+        spaceState={SpaceStates.IS_COVERED} />
     }
   }
 }
