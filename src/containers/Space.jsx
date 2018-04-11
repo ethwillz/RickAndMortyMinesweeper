@@ -1,23 +1,28 @@
 import { connect } from 'react-redux';
 import Space from '../components/Space';
-import { SpaceStates, setSpaceState } from '../actions/actions';
-import { withRouter } from 'react-router-dom';
+import { SpaceStates, setSpaceState, generateBoard } from '../actions/actions';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onSpaceClick: (e, id) => {
-      let spaceStateToSend = ownProps.spaceState;
-      if(e.type === 'contextmenu'){
-        if(ownProps.spaceState === SpaceStates.IS_COVERED){
-           spaceStateToSend = SpaceStates.IS_FLAGGED;
-         }
-        else if(ownProps.spaceState === SpaceStates.IS_FLAGGED) spaceStateToSend = SpaceStates.IS_COVERED;
+    onSpaceClick: (e, adjacentBombs, id) => {
+      if(adjacentBombs === -1){
+        dispatch(generateBoard(ownProps.id, ownProps.boardSize)); //special case for first click since you can't lose
       }
-      else if(ownProps.spaceState === SpaceStates.IS_COVERED){
-        spaceStateToSend = SpaceStates.IS_UNCOVERED;
-      }
+      else{
+        let spaceStateToSend = ownProps.spaceState;
 
-      dispatch(setSpaceState(ownProps.id, ownProps.boardSize, spaceStateToSend));
+        if(e.type === 'contextmenu'){
+          if(ownProps.spaceState === SpaceStates.IS_COVERED){
+             spaceStateToSend = SpaceStates.IS_FLAGGED;
+           }
+          else if(ownProps.spaceState === SpaceStates.IS_FLAGGED) spaceStateToSend = SpaceStates.IS_COVERED;
+        }
+        else if(ownProps.spaceState === SpaceStates.IS_COVERED){
+          spaceStateToSend = SpaceStates.IS_UNCOVERED;
+        }
+
+        dispatch(setSpaceState(ownProps.id, ownProps.boardSize, spaceStateToSend));
+      }
     }
   }
 }
@@ -25,4 +30,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   null,
   mapDispatchToProps,
-)(withRouter(Space))
+)(Space)

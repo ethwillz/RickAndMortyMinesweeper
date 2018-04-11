@@ -14,12 +14,13 @@ export default class Space extends React.Component{
 
   onClick(e){
     e.preventDefault();
-    this.props.onSpaceClick(e, this.props.id);
+    this.props.onSpaceClick(e, this.props.adjacentBombs, this.props.id);
   }
 
   render(){
     let props = this.props;
-    let boardDimension = 70 / props.boardSize + 'vh';
+    let spaceDimension = 70 / props.boardSize + 'vh';
+    let numDimension = 60 / props.boardSize + 'vh';
 
     let isCovered = props.spaceState === SpaceStates.IS_COVERED ? 'block' : 'none';
     let isBomb = props.spaceState === SpaceStates.IS_UNCOVERED && props.hasBomb ? 'block' : 'none';
@@ -27,14 +28,14 @@ export default class Space extends React.Component{
     let isFlagged = props.spaceState === SpaceStates.IS_FLAGGED ? 'flex' : 'none';
 
     let imgStyle = {
-      width: boardDimension,
-      height: boardDimension,
+      width: spaceDimension,
+      height: spaceDimension,
       cursor: 'pointer',
     }
 
     let divStyle = {
-      height: boardDimension,
-      width: boardDimension,
+      height: spaceDimension,
+      width: spaceDimension,
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
@@ -64,7 +65,7 @@ export default class Space extends React.Component{
         <div style={{
             display: isNumber,
           }} >
-          <h2 style={{margin: 0, textAlign: 'center', textSize: 65 / props.boardSize + 'vh'}} >
+          <h2 style={{margin: 0, textAlign: 'center', fontSize: numDimension}} >
             {props.adjacentBombs}
           </h2>
         </div>

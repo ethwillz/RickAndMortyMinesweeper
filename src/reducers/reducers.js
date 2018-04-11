@@ -1,12 +1,10 @@
 import React from'react';
-import { SET_SPACE_STATE, SET_BOARD_SIZE, SpaceStates } from '../actions/actions';
-import Space from '../containers/Space'
+import { SET_SPACE_STATE, SET_BOARD_SIZE, GENERATE_BOARD, SpaceStates } from '../actions/actions';
+import Space from '../containers/Space';
 
 /*
-  Implements the functionality of minesweeper where if a space not touching bombs
-  is clicked and the adjacent spaces that are 0 are revealed
-
-  NEEDS WORK, ONLY CHECKS TILL FAILURE IN EACH OF 8 DIRECTIONS
+  If a space isn't touching any bombs then all spaces it can "reach" which aren't
+  touching bombs are also uncovered
 */
 function propogateZeros(id, size, spaces, state){
   let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
@@ -22,7 +20,15 @@ function propogateZeros(id, size, spaces, state){
       if(spaces[tempY][tempX].props.adjacentBombs === 0
         && !spaces[tempY][tempX].props.hasBomb
         && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
-        spaces[tempY][tempX] = spaceBuilder(spaces[tempY][tempX], state);
+
+        spaces[tempY][tempX] = <Space
+          id={spaces[tempY][tempX].props.id}
+          key={state.idGenerator++}
+          adjacentBombs={spaces[tempY][tempX].props.adjacentBombs}
+          hasBomb={spaces[tempY][tempX].props.hasBomb}
+          boardSize={spaces[tempY][tempX].props.boardSize}
+          spaceState={SpaceStates.IS_UNCOVERED} />
+
         spacesToCheckFromAgain.push(spaces[tempY][tempX]);
         tempY += dir[0];
         tempX += dir[1];
@@ -36,16 +42,10 @@ function propogateZeros(id, size, spaces, state){
   return spaces;
 }
 
-function spaceBuilder(space, state){
-  return <Space
-    id={space.props.id}
-    key={state.idGenerator++}
-    adjacentBombs={space.props.adjacentBombs}
-    hasBomb={space.props.hasBomb}
-    boardSize={space.props.boardSize}
-    spaceState={SpaceStates.IS_UNCOVERED} />
-}
-
+/*
+  Checks 8 spaces immediately around given space and returns number of those
+  spaces which contain bombs
+*/
 function checkForBombs(spaces, size, i, j){
   let bombsTouching = 0;
   let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
@@ -63,7 +63,12 @@ function checkForBombs(spaces, size, i, j){
   return bombsTouching;
 }
 
-function generateBoard(state, size){
+/*
+  Generates board by randomly placing an amount of bombs approximate to the probability
+  of a bomb given board size. Remaining spaces are filled in with covered spaces
+*/
+function generateBoard(state, id, size){
+  console.log(state, size, id);
   let lim;
   switch(size){
     case 8:
@@ -80,11 +85,14 @@ function generateBoard(state, size){
       break;
   }
 
-  let spaces = Array(size).fill(0).map(row => new Array(size).fill(false));
+  let spaces = [...state.spaces];
+  let x = id % size;
+  let y = parseInt(id / size, 10);
+
   let bombsPlaced = 0;
   for(let i = 0; i < size; i++){
     for(let j = 0; j < size; j++){
-      if(Math.random() < lim){
+      if(Math.random() < lim && (i !== y || j !== x)){
         spaces[i][j] = <Space
           id={i * size + j}
           key={state.idGenerator++}
@@ -99,10 +107,19 @@ function generateBoard(state, size){
 
   for(let i = 0; i < size; i++){
     for(let j = 0; j < size; j++){
-      if(spaces[i][j] === false){
-        let adjacentBombs = checkForBombs(spaces, size, i, j);
+      let adjacentBombs = checkForBombs(spaces, size, i, j);
+      if(i === y && j === x){
         spaces[i][j] = <Space
-          id={i * size + j}
+          id={spaces[i][j].props.id}
+          key={state.idGenerator++}
+          adjacentBombs={adjacentBombs}
+          hasBomb={false}
+          boardSize={size}
+          spaceState={SpaceStates.IS_UNCOVERED} />
+      }
+      else if(!spaces[i][j].props.hasBomb){
+        spaces[i][j] = <Space
+          id={spaces[i][j].props.id}
           key={state.idGenerator++}
           adjacentBombs={adjacentBombs}
           hasBomb={false}
@@ -115,6 +132,9 @@ function generateBoard(state, size){
   return [spaces, bombsPlaced];
 }
 
+/*
+  Main reducer
+*/
 function board(state = { idGenerator: 0 }, action){
   switch(action.type){
     case SET_SPACE_STATE:
@@ -125,13 +145,13 @@ function board(state = { idGenerator: 0 }, action){
       if(action.spaceState === SpaceStates.IS_FLAGGED){
         state.bombsRemaining--;
         if(state.bombsRemaining === 0){
-          //send win message
+          // win sequence
         }
       }
       if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb)
         state.bombsRemaining++;
       if(action.spaceState === SpaceStates.IS_UNCOVERED && spaces[y][x].props.hasBomb){
-        //send loss message
+        // loss sequence
       }
 
       spaces[y][x] = <Space
@@ -148,8 +168,22 @@ function board(state = { idGenerator: 0 }, action){
       }
       return Object.assign({}, state, {spaces: spaces});
     case SET_BOARD_SIZE:
-      let boardStats = generateBoard(state, action.boardSize);
-      return Object.assign({}, state, {spaces: boardStats[0], bombsRemaining: boardStats[1]});
+      spaces = Array(action.boardSize).fill(0).map(row => new Array(action.boardSize).fill(false));
+      for(let i = 0; i < action.boardSize; i++){
+        for(let j = 0; j < action.boardSize; j++){
+        spaces[i][j] = <Space
+          id={i * action.boardSize + j}
+          key={state.idGenerator++}
+          adjacentBombs={-1}
+          hasBomb={false}
+          boardSize={action.boardSize}
+          spaceState={SpaceStates.IS_COVERED} />
+        }
+      }
+      return Object.assign({}, state, {spaces: spaces});
+    case GENERATE_BOARD:
+      let boardInfo = generateBoard(state, action.id, action.boardSize);
+      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1]});
     default:
       return state;
   }
