@@ -3,11 +3,11 @@ import Board from '../components/Board';
 import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = (state) => {
-  if(state.board.spaces) return { spaces: state.board.spaces }
+  if(state.spaces) return { spaces: state.spaces }
   return { spaces: Array([]) };
 }
 
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   null
-)(Board))
+)(withRouter(Board))

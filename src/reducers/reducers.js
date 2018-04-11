@@ -37,30 +37,6 @@ function spaceBuilder(space, state){
     spaceState={SpaceStates.IS_UNCOVERED} />
 }
 
-function spaceState(state = Array([]), action){
-  switch(action.type){
-    case SET_SPACE_STATE:
-      let x = action.id % action.size;
-      let y = parseInt(action.id / action.size, 10);
-      let spaces = [...state.board.spaces];
-      spaces[y][x] = <Space
-        id={action.id}
-        key={state.idGenerator++}
-        adjacentBombs={spaces[y][x].props.adjacentBombs}
-        hasBomb={spaces[y][x].props.hasBomb}
-        boardSize={action.size}
-        spaceState={action.spaceState} />
-      if(action.spaceState !== SpaceStates.IS_FLAGGED
-        && spaces[y][x].props.adjacentBombs === 0
-        && !spaces[y][x].props.hasBomb){
-        spaces = propogateZeros(action.id, spaces, state, y, x);
-      }
-      return Object.assign({}, state, {spaces: spaces});
-    default:
-      return state;
-  }
-}
-
 function checkForBombs(spaces, size, i, j){
   let bombsTouching = 0;
 
@@ -114,6 +90,7 @@ function generateBoard(state, size){
   }
 
   let spaces = Array(size).fill(0).map(row => new Array(size).fill(false));
+  let bombsPlaced = 0;
   for(let i = 0; i < size; i++){
     for(let j = 0; j < size; j++){
       if(Math.random() < lim){
@@ -124,6 +101,7 @@ function generateBoard(state, size){
           hasBomb={true}
           boardSize={size}
           spaceState={SpaceStates.IS_COVERED} />
+          bombsPlaced++;
       }
     }
   }
@@ -143,22 +121,47 @@ function generateBoard(state, size){
     }
   }
 
-  return spaces;
+  return [spaces, bombsPlaced];
 }
 
 function board(state = { idGenerator: 0 }, action){
   switch(action.type){
-    case SET_BOARD_SIZE:
-      let spaces = generateBoard(state, action.boardSize);
+    case SET_SPACE_STATE:
+      let x = action.id % action.size;
+      let y = parseInt(action.id / action.size, 10);
+      let spaces = [...state.spaces];
+
+      if(action.spaceState === SpaceStates.IS_FLAGGED){
+        state.bombsRemaining--;
+        if(state.bombsRemaining === 0){
+          //send win message
+        }
+      }
+      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb)
+        state.bombsRemaining++;
+      if(action.spaceState === SpaceStates.IS_UNCOVERED && spaces[y][x].props.hasBomb){
+        //send loss message
+      }
+
+      spaces[y][x] = <Space
+        id={action.id}
+        key={state.idGenerator++}
+        adjacentBombs={spaces[y][x].props.adjacentBombs}
+        hasBomb={spaces[y][x].props.hasBomb}
+        boardSize={action.size}
+        spaceState={action.spaceState} />
+      if(action.spaceState !== SpaceStates.IS_FLAGGED
+        && spaces[y][x].props.adjacentBombs === 0
+        && !spaces[y][x].props.hasBomb){
+        spaces = propogateZeros(action.id, spaces, state, y, x);
+      }
       return Object.assign({}, state, {spaces: spaces});
+    case SET_BOARD_SIZE:
+      let boardStats = generateBoard(state, action.boardSize);
+      return Object.assign({}, state, {spaces: boardStats[0], bombsRemaining: boardStats[1]});
     default:
       return state;
   }
 }
 
-const reducers = {
-  spaceState,
-  board
-};
-
-export default reducers;
+export default board;

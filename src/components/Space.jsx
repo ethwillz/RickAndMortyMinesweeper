@@ -62,14 +62,9 @@ export default class Space extends React.Component{
             style = {{...imgStyle, position: 'absolute'}} />
         </div>
         <div style={{
-            ...divStyle,
             display: isNumber,
-            color: '#4badc8',
-            textShadow: '-1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b',
-            paddingBottom: 0,
-            fontSize: '180%',
           }} >
-          <h2 style={{margin: 0, textAlign: 'center'}} >
+          <h2 style={{margin: 0, textAlign: 'center', textSize: 65 / props.boardSize + 'vh'}} >
             {props.adjacentBombs}
           </h2>
         </div>

@@ -17,11 +17,20 @@ export default class DifficultySelection extends React.Component{
   render(){
     return (
       <div>
-        <h2>Select your difficulty</h2>
-        <div>
-          <h3 onClick={this.onClick}>Easy</h3>
-          <h3 onClick={this.onClick}>Medium</h3>
-          <h3 onClick={this.onClick}>Hard</h3>
+        <h2 style={{textAlign: 'center', fontSize: '300%'}}>Select your difficulty</h2>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            width: '50vw'
+          }} >
+          <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Easy</h2>
+          <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Medium</h2>
+          <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Hard</h2>
+          <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Extreme</h2>
         </div>
       </div>
     )
