@@ -42,7 +42,7 @@ function spaceState(state = Array([]), action){
     case SET_SPACE_STATE:
       let x = action.id % action.size;
       let y = parseInt(action.id / action.size, 10);
-      let spaces = [...state.spaces];
+      let spaces = [...state.board.spaces];
       spaces[y][x] = <Space
         id={action.id}
         key={state.idGenerator++}
@@ -146,7 +146,7 @@ function generateBoard(state, size){
   return spaces;
 }
 
-function boardSize(state = { idGenerator: 0 }, action){
+function board(state = { idGenerator: 0 }, action){
   switch(action.type){
     case SET_BOARD_SIZE:
       let spaces = generateBoard(state, action.boardSize);
@@ -158,7 +158,7 @@ function boardSize(state = { idGenerator: 0 }, action){
 
 const reducers = {
   spaceState,
-  boardSize
+  board
 };
 
 export default reducers;

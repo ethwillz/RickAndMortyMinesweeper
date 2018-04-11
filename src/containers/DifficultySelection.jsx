@@ -20,4 +20,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default withRouter(connect(
   null,
   mapDispatchToProps
-))(DifficultySelection)
+)(DifficultySelection))
