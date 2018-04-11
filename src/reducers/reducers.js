@@ -8,21 +8,30 @@ import Space from '../containers/Space'
 
   NEEDS WORK, ONLY CHECKS TILL FAILURE IN EACH OF 8 DIRECTIONS
 */
-function propogateZeros(id, spaces, state, y, x){
-  let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]]
+function propogateZeros(id, size, spaces, state){
+  let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
+
+  let x = id % size;
+  let y = parseInt(id / size, 10);
+  let spacesToCheckFromAgain = [];
 
   dirs.forEach(dir => {
     let tempY = y + dir[0];
     let tempX = x + dir[1];
     while(tempY < spaces.length && tempY > -1 && tempX < spaces.length && tempX > -1){
-      if(spaces[tempY][tempX].props.adjacentBombs === 0 && !spaces[tempY][tempX].props.hasBomb){
-        spaces[tempY][tempX] = spaceBuilder(spaces[tempY][tempX],state);
+      if(spaces[tempY][tempX].props.adjacentBombs === 0
+        && !spaces[tempY][tempX].props.hasBomb
+        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
+        spaces[tempY][tempX] = spaceBuilder(spaces[tempY][tempX], state);
+        spacesToCheckFromAgain.push(spaces[tempY][tempX]);
         tempY += dir[0];
-        tempX += dir[1]
+        tempX += dir[1];
       }
       else break;
     }
   });
+
+  spacesToCheckFromAgain.forEach(space => propogateZeros(space.props.id, size, spaces, state));
 
   return spaces;
 }
@@ -39,35 +48,17 @@ function spaceBuilder(space, state){
 
 function checkForBombs(spaces, size, i, j){
   let bombsTouching = 0;
+  let dirs = [[-1, -1], [-1, 0], [-1, 1], [0, -1], [0, 1], [1, -1], [1, 0], [1, 1]];
 
-  if(i > 0
-    && spaces[i-1][j]
-    && spaces[i-1][j].props.hasBomb) bombsTouching++;
-  if(i > 0
-    && j < size - 1
-    && spaces[i-1][j+1]
-    && spaces[i-1][j+1].props.hasBomb) bombsTouching++;
-  if(j < size - 1
-    && spaces[i][j+1]
-    && spaces[i][j+1].props.hasBomb) bombsTouching++;
-  if(i < size - 1
-    && j < size - 1
-    && spaces[i+1][j+1]
-    && spaces[i+1][j+1].props.hasBomb) bombsTouching++;
-  if(i < size - 1
-    && spaces[i+1][j]
-    && spaces[i+1][j].props.hasBomb) bombsTouching++;
-  if(i < size - 1
-    && j > 0
-    && spaces[i+1][j-1]
-    && spaces[i+1][j-1].props.hasBomb) bombsTouching++;
-  if(j > 0
-    && spaces[i][j-1]
-    && spaces[i][j-1].props.hasBomb) bombsTouching++;
-  if(i > 0
-    && j > 0
-    && spaces[i-1][j-1]
-    && spaces[i-1][j-1].props.hasBomb) bombsTouching++;
+  dirs.forEach(dir => {
+    let y = i + dir[0];
+    let x = j + dir[1];
+
+    if(y > -1 && y < size && x > -1 && x < size && spaces[y][x]){
+      if(spaces[y][x].props.hasBomb)
+        bombsTouching++;
+    }
+  });
 
   return bombsTouching;
 }
@@ -153,7 +144,7 @@ function board(state = { idGenerator: 0 }, action){
       if(action.spaceState !== SpaceStates.IS_FLAGGED
         && spaces[y][x].props.adjacentBombs === 0
         && !spaces[y][x].props.hasBomb){
-        spaces = propogateZeros(action.id, spaces, state, y, x);
+        spaces = propogateZeros(action.id, action.size, spaces, state);
       }
       return Object.assign({}, state, {spaces: spaces});
     case SET_BOARD_SIZE:
