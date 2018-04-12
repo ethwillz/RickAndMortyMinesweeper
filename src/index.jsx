@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { Route } from 'react-router';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import win from './images/win.gif';
+import loss from './images/loss.gif';
 
 import DifficultySelection from './containers/DifficultySelection';
 import Board from './containers/Board';
@@ -22,6 +24,8 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={DifficultySelection}/>
         <Route path="/play" component={Board}/>
+        <Route path="/win" component={() => <img style={{width: '100vw', height: '100vh'}} src={win} alt='bs'/>} />
+        <Route path="/loss" component={() => <img style={{width: '100vw', height: '100vh'}} src={loss} alt='bs'/>} />
       </div>
     </ConnectedRouter>
   </Provider>,

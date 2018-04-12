@@ -144,14 +144,9 @@ function board(state = { idGenerator: 0 }, action){
 
       if(action.spaceState === SpaceStates.IS_FLAGGED){
         state.bombsRemaining--;
-        if(state.bombsRemaining === 0){
-          // win sequence
-        }
       }
-      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb)
+      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
         state.bombsRemaining++;
-      if(action.spaceState === SpaceStates.IS_UNCOVERED && spaces[y][x].props.hasBomb){
-        // loss sequence
       }
 
       spaces[y][x] = <Space
