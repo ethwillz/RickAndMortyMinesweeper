@@ -177,7 +177,7 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {spaces: spaces});
     case GENERATE_BOARD:
       let boardInfo = generateBoard(state, action.id, action.boardSize);
-      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1]});
+      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1], timer: 0});
     default:
       return state;
   }

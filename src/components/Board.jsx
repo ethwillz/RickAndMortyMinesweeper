@@ -4,6 +4,15 @@ import Ad from './Ad';
 
 export default class Board extends React.Component{
 
+  constructor(props){
+    super(props);
+    this.tick = this.tick.bind(this);
+  }
+
+  componentDidMount(){
+    this.props.startTimer;
+  }
+
   render(){
     return (
       <div>
@@ -25,4 +34,5 @@ Board.propTypes = {
       PropTypes.shape().isRequired
     ).isRequired
   ).isRequired,
+  starTimer: PropTypes.func.isRequired;
 }

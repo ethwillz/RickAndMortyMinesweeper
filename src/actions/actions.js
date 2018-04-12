@@ -37,7 +37,17 @@ export function checkIfWon(){
   return (dispatch, getState) => {
     const { bombsRemaining } = getState();
     if(bombsRemaining === 0) dispatch(push('/EndGame/win'));
+    dipatch(endTimerAndSendTime());
   }
+}
+
+export const startTimer = () => {
+  const { timer } = getState();
+  let intervalId = setInterval(dispatch(tick()), 1000);
+}
+
+export const endTimerAndSendTime = () => {
+
 }
 
 export default {
