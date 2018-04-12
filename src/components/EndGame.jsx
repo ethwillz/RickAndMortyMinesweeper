@@ -33,9 +33,18 @@ export default class EndGame extends React.Component{
     }
 
     return (
-      <div style={{position: 'relative'}} >
-        <h2 style={{position: 'absolute'}}><Link to='/'>Play again?</Link></h2>
-        <img style={{position: 'absolute'}} src={loss} alt='bs' />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+        }} >
+        <img style={{position: 'absolute', width: '100vw', height: '100vh'}} src={loss} alt='bs' />
+        <h2 style={{position: 'absolute', fontSize: '10vw', margin: '0'}}>
+          <StyledLink to='/'>Play again?</StyledLink>
+        </h2>
       </div>
     )
   }
