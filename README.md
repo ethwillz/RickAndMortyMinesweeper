@@ -8,6 +8,9 @@ Implementation of classic minesweeper skinned like Rick & Morty hosted [here](ht
 Built using:
 
 - [React](https://reactjs.org/)
+- [Redux (via react-redux)](https://github.com/reactjs/react-redux)
+- [react-router-redux](https://github.com/reactjs/react-router-redux)
+- [redux-thunk](https://github.com/gaearon/redux-thunk)
 - [Firebase](https://firebase.google.com/)
 - [webpack](https://webpack.js.org/)
 - [Travis CI](https://travis-ci.org)

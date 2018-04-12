@@ -142,7 +142,7 @@ function board(state = { idGenerator: 0 }, action){
       let y = parseInt(action.id / action.size, 10);
       let spaces = [...state.spaces];
 
-      if(action.spaceState === SpaceStates.IS_FLAGGED){
+      if(action.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
         state.bombsRemaining--;
       }
       if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){

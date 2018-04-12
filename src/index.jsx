@@ -1,22 +1,27 @@
+// npm packages
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import registerServiceWorker from './registerServiceWorker';
-import board from './reducers/reducers';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { Route } from 'react-router';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import win from './images/win.gif';
-import loss from './images/loss.gif';
+import thunk from 'redux-thunk';
 
+// components
 import DifficultySelection from './containers/DifficultySelection';
 import Board from './containers/Board';
 
+// other files
+import registerServiceWorker from './registerServiceWorker';
+import board from './reducers/reducers';
+import './index.css';
+import win from './images/win.gif';
+import loss from './images/loss.gif';
+
 const history = createHistory();
 const middleware = routerMiddleware(history);
-let store = createStore(board, applyMiddleware(middleware));
+let store = createStore(board, applyMiddleware(middleware, thunk));
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,12 +1,7 @@
 import { connect } from 'react-redux';
 import Space from '../components/Space';
-import { SpaceStates, setSpaceState, generateBoard } from '../actions/actions';
-import { push } from 'react-router-redux'
-
-const mapStateToProps = (state, ownProps) => {
-  console.log(state.bombsRemaining);
-  return { bombsRemaining: state.bombsRemaining }
-}
+import { SpaceStates, setSpaceState, generateBoard, checkIfWon } from '../actions/actions';
+import { push } from 'react-router-redux';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
@@ -17,11 +12,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       else{
 
         if(e.type === 'contextmenu'){
+          console.log(ownProps);
           if(ownProps.spaceState === SpaceStates.IS_COVERED){
-            if(ownProps.bombsRemaining === 1){ //something not working right with this mechanism
-              dispatch(push('/win'));
-            }
             dispatch(setSpaceState(ownProps.id, ownProps.boardSize, SpaceStates.IS_FLAGGED));
+            dispatch(checkIfWon());
            }
           else if(ownProps.spaceState === SpaceStates.IS_FLAGGED){
             dispatch(setSpaceState(ownProps.id, ownProps.boardSize, SpaceStates.IS_COVERED));
@@ -39,6 +33,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Space)

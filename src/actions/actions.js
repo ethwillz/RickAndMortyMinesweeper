@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 export const SET_SPACE_STATE = 'SET_SPACE_STATE';
 export const SET_BOARD_SIZE = 'SET_BOARD_SIZE';
 export const GENERATE_BOARD = 'GENERATE_BOARD';
@@ -31,6 +33,13 @@ export function generateBoard(id, boardSize){
   }
 }
 
+export function checkIfWon(){
+  return (dispatch, getState) => {
+    const { bombsRemaining } = getState();
+    if(bombsRemaining === 0) dispatch(push('/win'));
+  }
+}
+
 export default {
   SET_SPACE_STATE,
   SET_BOARD_SIZE,
@@ -39,4 +48,5 @@ export default {
   setSpaceState,
   setBoardSize,
   generateBoard,
+  checkIfWon,
 }
