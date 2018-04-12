@@ -1,7 +1,7 @@
 import DifficultySelection from '../components/DifficultySelection';
 import { setBoardSize } from '../actions/actions';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { push } from 'react-router-redux';
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
@@ -13,6 +13,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       if(difficulty === "Extreme") boardSize = 20;
 
       dispatch(setBoardSize(boardSize));
+      dispatch(push('/play'));
     }
   }
 }
@@ -20,4 +21,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   null,
   mapDispatchToProps
-)(withRouter(DifficultySelection))
+)(DifficultySelection)

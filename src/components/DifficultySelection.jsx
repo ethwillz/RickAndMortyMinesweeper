@@ -8,11 +8,7 @@ export default class DifficultySelection extends React.Component{
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick(e){
-    this.props.onDifficultyClick(e.target.innerHTML);
-
-    this.props.history.push("/play");
-  }
+  onClick(e){ this.props.onDifficultyClick(e.target.innerHTML); }
 
   render(){
     return (

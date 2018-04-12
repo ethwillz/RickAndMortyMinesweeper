@@ -1,5 +1,8 @@
+import { push } from 'react-router-redux';
+
 export const SET_SPACE_STATE = 'SET_SPACE_STATE';
 export const SET_BOARD_SIZE = 'SET_BOARD_SIZE';
+export const GENERATE_BOARD = 'GENERATE_BOARD';
 
 export const SpaceStates = {
   IS_COVERED: 'IS_COVERED',
@@ -22,10 +25,28 @@ export function setBoardSize(boardSize){
   };
 }
 
+export function generateBoard(id, boardSize){
+  return {
+    type: GENERATE_BOARD,
+    id,
+    boardSize
+  }
+}
+
+export function checkIfWon(){
+  return (dispatch, getState) => {
+    const { bombsRemaining } = getState();
+    if(bombsRemaining === 0) dispatch(push('/EndGame/win'));
+  }
+}
+
 export default {
   SET_SPACE_STATE,
   SET_BOARD_SIZE,
+  GENERATE_BOARD,
   SpaceStates,
   setSpaceState,
-  setBoardSize
+  setBoardSize,
+  generateBoard,
+  checkIfWon,
 }
