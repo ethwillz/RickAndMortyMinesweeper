@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           }
         }
         else if(ownProps.spaceState === SpaceStates.IS_COVERED && ownProps.hasBomb){
-          dispatch(push('/loss'));
+          dispatch(push('EndGame/loss'));
         }
         else if(ownProps.spaceState === SpaceStates.IS_COVERED){
           dispatch(setSpaceState(ownProps.id, ownProps.boardSize, SpaceStates.IS_UNCOVERED));

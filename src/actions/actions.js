@@ -36,7 +36,7 @@ export function generateBoard(id, boardSize){
 export function checkIfWon(){
   return (dispatch, getState) => {
     const { bombsRemaining } = getState();
-    if(bombsRemaining === 0) dispatch(push('/win'));
+    if(bombsRemaining === 0) dispatch(push('/EndGame/win'));
   }
 }
 

@@ -11,13 +11,12 @@ import thunk from 'redux-thunk';
 // components
 import DifficultySelection from './containers/DifficultySelection';
 import Board from './containers/Board';
+import EndGame from './components/EndGame'
 
 // other files
 import registerServiceWorker from './registerServiceWorker';
 import board from './reducers/reducers';
 import './index.css';
-import win from './images/win.gif';
-import loss from './images/loss.gif';
 
 const history = createHistory();
 const middleware = routerMiddleware(history);
@@ -29,8 +28,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={DifficultySelection}/>
         <Route path="/play" component={Board}/>
-        <Route path="/win" component={() => <img style={{width: '100vw', height: '100vh'}} src={win} alt='bs'/>} />
-        <Route path="/loss" component={() => <img style={{width: '100vw', height: '100vh'}} src={loss} alt='bs'/>} />
+        <Route path="/EndGame/:res" component={EndGame} />
       </div>
     </ConnectedRouter>
   </Provider>,

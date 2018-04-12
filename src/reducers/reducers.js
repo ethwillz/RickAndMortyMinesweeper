@@ -68,7 +68,6 @@ function checkForBombs(spaces, size, i, j){
   of a bomb given board size. Remaining spaces are filled in with covered spaces
 */
 function generateBoard(state, id, size){
-  console.log(state, size, id);
   let lim;
   switch(size){
     case 8:
@@ -129,12 +128,12 @@ function generateBoard(state, id, size){
     }
   }
 
+  if(spaces[y][x].props.adjacentBombs === 0)
+    spaces = propogateZeros(id, size, spaces, state);
+
   return [spaces, bombsPlaced];
 }
 
-/*
-  Main reducer
-*/
 function board(state = { idGenerator: 0 }, action){
   switch(action.type){
     case SET_SPACE_STATE:
