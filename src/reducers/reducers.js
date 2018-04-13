@@ -198,7 +198,7 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {timer: timer});
     case STOP_TIMER:
       clearInterval(state.interval);
-      break;
+      return state;
     case SEND_SCORE_TO_DB:
       firebase.firestore().collection('scores').add({
         name: action.name,
@@ -211,7 +211,7 @@ function board(state = { idGenerator: 0 }, action){
       .catch((error) => {
         console.log('Error with adding score: ' + error);
       });
-      break;
+      return state;
     default:
       return state;
   }

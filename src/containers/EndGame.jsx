@@ -2,7 +2,7 @@ import { connect} from 'react-redux';
 import EndGame from '../components/EndGame';
 import { sendScoreToDB } from '../actions/actions'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return { timer: state.timer }
 }
 
