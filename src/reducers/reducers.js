@@ -1,5 +1,12 @@
 import React from'react';
-import { SET_SPACE_STATE, SET_BOARD_SIZE, GENERATE_BOARD, SpaceStates } from '../actions/actions';
+import {
+  SET_SPACE_STATE,
+  SET_BOARD_SIZE,
+  GENERATE_BOARD,
+  START_TIMER,
+  TIMER_TICK,
+  STOP_TIMER,
+  SpaceStates } from '../actions/actions';
 import Space from '../containers/Space';
 
 /*
@@ -177,7 +184,18 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {spaces: spaces});
     case GENERATE_BOARD:
       let boardInfo = generateBoard(state, action.id, action.boardSize);
-      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1], timer: 0});
+      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1]});
+    case START_TIMER:
+      return Object.assign({}, state, {timer: action.timer, interval: action.interval});
+    case TIMER_TICK:
+      console.log(state);
+      let timer = state.timer;
+      timer++;
+      return Object.assign({}, state, {timer: timer});
+    case STOP_TIMER:
+      clearInterval(state.interval); //not working rn but needs to
+      console.log('hitit');
+      break;
     default:
       return state;
   }

@@ -1,6 +1,6 @@
 import { connect} from 'react-redux';
 import Board from '../components/Board';
-import { startTimer } from '../actions/actions';
+import { startTimer, stopTimer } from '../actions/actions';
 
 const mapStateToProps = (state) => {
   return { spaces: state.spaces, timer: state.timer }
@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    startTimer: () => { dispatch(startTimer()) }
+    startTimer: () => { dispatch(startTimer()) },
+    stopTimer: () => { dispatch(stopTimer()) },
   }
 }
 
