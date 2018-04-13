@@ -6,8 +6,8 @@ import { push } from 'react-router-redux';
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
   onDifficultyClick: (difficulty) => {
-      console.log(difficulty);
       let boardSize = 8;
+      if(difficulty === "Testing")  boardSize = 2;
       if(difficulty === "Medium")  boardSize = 12;
       if(difficulty === "Hard") boardSize = 15;
       if(difficulty === "Extreme") boardSize = 20;

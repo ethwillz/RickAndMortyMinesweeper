@@ -13,7 +13,7 @@ export default class Board extends React.Component{
     this.props.startTimer();
   }
 
-  componentDidUnmount(){
+  componentWillUnmount(){
     this.props.stopTimer();
   }
 
@@ -60,5 +60,4 @@ Board.propTypes = {
       PropTypes.shape().isRequired
     ).isRequired
   ).isRequired,
-  starTimer: PropTypes.func.isRequired,
 }

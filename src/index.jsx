@@ -11,12 +11,26 @@ import thunk from 'redux-thunk';
 // components
 import DifficultySelection from './containers/DifficultySelection';
 import Board from './containers/Board';
-import EndGame from './components/EndGame'
+import EndGame from './containers/EndGame'
 
 // other files
 import registerServiceWorker from './registerServiceWorker';
 import board from './reducers/reducers';
 import './index.css';
+
+var firebase = require("firebase/app");
+require("firebase/firestore");
+//require("firebase/functions");
+
+var config = {
+  apiKey: "AIzaSyDexOFDISJ2lpxLSKCCZ0JHXEUuDT_0bWQ",
+  authDomain: "rick-and-morty-minesweeper.firebaseapp.com",
+  databaseURL: "https://rick-and-morty-minesweeper.firebaseio.com",
+  projectId: "rick-and-morty-minesweeper",
+  storageBucket: "rick-and-morty-minesweeper.appspot.com",
+  messagingSenderId: "1089615583862"
+};
+firebase.initializeApp(config);
 
 const history = createHistory();
 const middleware = routerMiddleware(history);

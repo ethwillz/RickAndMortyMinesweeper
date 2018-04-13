@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import * as firebase from 'firebase';
 
 export const SET_SPACE_STATE = 'SET_SPACE_STATE';
 export const SET_BOARD_SIZE = 'SET_BOARD_SIZE';
@@ -42,7 +43,18 @@ export function checkIfWon(){
     if(bombsRemaining === 0){
       dispatch(push('/EndGame/win'));
       dispatch(stopTimer());
-      // send timer to db
+      console.log('sending data');
+      firebase.firestore().collection('scores').add({
+        name: 'test',
+        score: timer,
+        country: 'USA'
+      })
+      .then((docRef) => {
+        console.log('Score added with id ' + docRef.id)
+      })
+      .catch((error) => {
+        console.log('Error with adding score: ' + error);
+      });
     }
   }
 }
@@ -80,4 +92,5 @@ export default {
   generateBoard,
   checkIfWon,
   startTimer,
+  stopTimer,
 }

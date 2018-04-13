@@ -21,8 +21,9 @@ export default class DifficultySelection extends React.Component{
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            width: '50vw'
+            width: '70vw'
           }} >
+          <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Testing</h2>
           <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Easy</h2>
           <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Medium</h2>
           <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Hard</h2>

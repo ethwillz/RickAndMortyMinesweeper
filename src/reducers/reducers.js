@@ -77,6 +77,9 @@ function checkForBombs(spaces, size, i, j){
 function generateBoard(state, id, size){
   let lim;
   switch(size){
+    case 4:
+      lim = .15;
+      break;
     case 8:
       lim = .16;
       break
@@ -188,13 +191,11 @@ function board(state = { idGenerator: 0 }, action){
     case START_TIMER:
       return Object.assign({}, state, {timer: action.timer, interval: action.interval});
     case TIMER_TICK:
-      console.log(state);
       let timer = state.timer;
       timer++;
       return Object.assign({}, state, {timer: timer});
     case STOP_TIMER:
-      clearInterval(state.interval); //not working rn but needs to
-      console.log('hitit');
+      clearInterval(state.interval);
       break;
     default:
       return state;
