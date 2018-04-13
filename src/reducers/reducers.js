@@ -6,8 +6,10 @@ import {
   START_TIMER,
   TIMER_TICK,
   STOP_TIMER,
+  SEND_SCORE_TO_DB,
   SpaceStates } from '../actions/actions';
 import Space from '../containers/Space';
+import * as firebase from 'firebase';
 
 /*
   If a space isn't touching any bombs then all spaces it can "reach" which aren't
@@ -196,6 +198,19 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {timer: timer});
     case STOP_TIMER:
       clearInterval(state.interval);
+      break;
+    case SEND_SCORE_TO_DB:
+      firebase.firestore().collection('scores').add({
+        name: action.name,
+        score: action.score,
+        country: action.country,
+      })
+      .then((docRef) => {
+        console.log('Score added with id ' + docRef.id)
+      })
+      .catch((error) => {
+        console.log('Error with adding score: ' + error);
+      });
       break;
     default:
       return state;

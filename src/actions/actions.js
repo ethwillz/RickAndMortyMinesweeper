@@ -1,5 +1,4 @@
 import { push } from 'react-router-redux';
-import * as firebase from 'firebase';
 
 export const SET_SPACE_STATE = 'SET_SPACE_STATE';
 export const SET_BOARD_SIZE = 'SET_BOARD_SIZE';
@@ -7,6 +6,7 @@ export const GENERATE_BOARD = 'GENERATE_BOARD';
 export const START_TIMER = 'START_TIMER';
 export const TIMER_TICK = 'TIMER_TICK';
 export const STOP_TIMER = 'STOP_TIMER';
+export const SEND_SCORE_TO_DB = 'SEND_SCORE_TO_DB';
 
 export const SpaceStates = {
   IS_COVERED: 'IS_COVERED',
@@ -39,22 +39,10 @@ export function generateBoard(id, boardSize){
 
 export function checkIfWon(){
   return (dispatch, getState) => {
-    const { bombsRemaining, timer } = getState();
+    const { bombsRemaining } = getState();
     if(bombsRemaining === 0){
       dispatch(push('/EndGame/win'));
       dispatch(stopTimer());
-      console.log('sending data');
-      firebase.firestore().collection('scores').add({
-        name: 'test',
-        score: timer,
-        country: 'USA'
-      })
-      .then((docRef) => {
-        console.log('Score added with id ' + docRef.id)
-      })
-      .catch((error) => {
-        console.log('Error with adding score: ' + error);
-      });
     }
   }
 }
@@ -79,6 +67,15 @@ export function stopTimer(){
   }
 }
 
+export function sendScoreToDB(name, score, country){
+  return {
+    type: SEND_SCORE_TO_DB,
+    name,
+    score,
+    country
+  }
+}
+
 export default {
   SET_SPACE_STATE,
   SET_BOARD_SIZE,
@@ -86,6 +83,7 @@ export default {
   START_TIMER,
   TIMER_TICK,
   STOP_TIMER,
+  SEND_SCORE_TO_DB,
   SpaceStates,
   setSpaceState,
   setBoardSize,
@@ -93,4 +91,5 @@ export default {
   checkIfWon,
   startTimer,
   stopTimer,
+  sendScoreToDB,
 }

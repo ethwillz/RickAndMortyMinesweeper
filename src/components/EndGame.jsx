@@ -10,6 +10,9 @@ export default class EndGame extends React.Component{
 
   constructor(props){
     super(props);
+    this.onClick = this.onClick.bind(this);
+    this.updateInput = this.updateInput.bind(this);
+
     this.state = Object.assign({}, this.state, {imgFaded: false})
 
     this.img = loss;
@@ -33,7 +36,7 @@ export default class EndGame extends React.Component{
 
     axios.get('http://api.ipstack.com/129.186.248.1?access_key=cc1cba0327d9a91277e3a5ddba1bc7ce')
     .then(response => {
-      console.log(response.data);
+      this.country = response.data.country_code;
     })
     .catch((error) => {
       console.log('Error getting country: ' + error);
@@ -44,6 +47,14 @@ export default class EndGame extends React.Component{
     setTimeout(() => {
       this.setState( {imgFaded: true} );
     }, 2500);
+  }
+
+  onClick(){
+    this.props.submitScore(this.props.timer, this.name, this.country)
+  }
+
+  updateInput(evt){
+    this.name= evt.target.value;
   }
 
   render(){
@@ -96,8 +107,8 @@ export default class EndGame extends React.Component{
         </table>
         <div style={{display: this.didWin}}>
           <h2>{this.props.timer}</h2>
-          <input placegolder='Name'></input>
-          <button>Submit Score</button>
+          <input onChange={this.updateInput} placeholder='Name'></input>
+          <button onClick={this.onClick}>Submit Score</button>
         </div>
         <h2
           className={this.state.imgFaded ? 'fadeIn' : ''}
