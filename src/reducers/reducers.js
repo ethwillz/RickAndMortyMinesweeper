@@ -26,9 +26,10 @@ function propogateZeros(id, size, spaces, state){
     let tempY = y + dir[0];
     let tempX = x + dir[1];
     while(tempY < spaces.length && tempY > -1 && tempX < spaces.length && tempX > -1){
-      if(spaces[tempY][tempX].props.adjacentBombs === 0
+      if((spaces[tempY][tempX].props.adjacentBombs === 0
         && !spaces[tempY][tempX].props.hasBomb
-        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
+        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED)){
+
 
         spaces[tempY][tempX] = <Space
           id={spaces[tempY][tempX].props.id}
@@ -39,14 +40,27 @@ function propogateZeros(id, size, spaces, state){
           spaceState={SpaceStates.IS_UNCOVERED} />
 
         spacesToCheckFromAgain.push(spaces[tempY][tempX]);
+
         tempY += dir[0];
         tempX += dir[1];
+        continue;
       }
-      else break;
+      else if(spaces[tempY][tempX].props.adjacentBombs !== 0
+        && !spaces[tempY][tempX].props.hasBomb
+        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
+          spaces[tempY][tempX] = <Space
+            id={spaces[tempY][tempX].props.id}
+            key={state.idGenerator++}
+            adjacentBombs={spaces[tempY][tempX].props.adjacentBombs}
+            hasBomb={spaces[tempY][tempX].props.hasBomb}
+            boardSize={spaces[tempY][tempX].props.boardSize}
+            spaceState={SpaceStates.IS_UNCOVERED} />
+        }
+      break;
     }
   });
 
-  spacesToCheckFromAgain.forEach(space => propogateZeros(space.props.id, size, spaces, state));
+  spacesToCheckFromAgain.forEach((space) => propogateZeros(space.props.id, size, spaces, state));
 
   return spaces;
 }
