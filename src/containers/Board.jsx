@@ -3,7 +3,10 @@ import Board from '../components/Board';
 import { startTimer, stopTimer } from '../actions/actions';
 
 const mapStateToProps = (state) => {
-  return { spaces: state.spaces, timer: state.timer }
+  return {
+    spaces: state.spaces,
+    timer: state.timer,
+  }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {

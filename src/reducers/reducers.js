@@ -93,20 +93,17 @@ function checkForBombs(spaces, size, i, j){
 function generateBoard(state, id, size){
   let lim;
   switch(size){
-    case 4:
-      lim = .15;
-      break;
     case 8:
       lim = .16;
       break
     case 12:
-      lim = .26;
+      lim = .20;
       break;
     case 15:
-      lim = .41;
+      lim = .25;
       break;
     default:
-      lim = .61;
+      lim = .30;
       break;
   }
 
@@ -117,7 +114,7 @@ function generateBoard(state, id, size){
   let bombsPlaced = 0;
   for(let i = 0; i < size; i++){
     for(let j = 0; j < size; j++){
-      if(Math.random() < lim && (i !== y || j !== x)){
+      if(Math.random() < lim && Math.sqrt(Math.pow((j - x), 2) + Math.pow((i - y), 2)) > 2){
         spaces[i][j] = <Space
           id={i * size + j}
           key={state.idGenerator++}
@@ -167,11 +164,13 @@ function board(state = { idGenerator: 0 }, action){
       let y = parseInt(action.id / action.size, 10);
       let spaces = [...state.spaces];
 
-      if(action.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
-        state.bombsRemaining--;
+      if(action.spaceState === SpaceStates.IS_FLAGGED){
+        if(spaces[y][x].props.hasBomb)
+          state.bombsRemaining--;
       }
-      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
-        state.bombsRemaining++;
+      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED){
+        if(spaces[y][x].props.hasBomb)
+          state.bombsRemaining++;
       }
 
       spaces[y][x] = <Space
@@ -203,7 +202,10 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {spaces: spaces});
     case GENERATE_BOARD:
       let boardInfo = generateBoard(state, action.id, action.boardSize);
-      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1]});
+      return Object.assign({}, state, {
+        spaces: boardInfo[0],
+        bombsRemaining: boardInfo[1],
+      });
     case START_TIMER:
       return Object.assign({}, state, {timer: action.timer, interval: action.interval});
     case TIMER_TICK:
@@ -212,7 +214,7 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {timer: timer});
     case STOP_TIMER:
       clearInterval(state.interval);
-      return state;
+      return Object.assign({}, state, {interval: undefined});
     case SEND_SCORE_TO_DB:
       firebase.firestore().collection('scores').add({
         name: action.name,

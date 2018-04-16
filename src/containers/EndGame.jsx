@@ -8,8 +8,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    submitScore: () => {
-      dispatch(sendScoreToDB);
+    submitScore: (name, score, country) => {
+      console.log(name, score, country);
+      dispatch(sendScoreToDB(name, score, country));
     }
   }
 }

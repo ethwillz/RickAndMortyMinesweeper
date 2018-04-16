@@ -39,9 +39,10 @@ export default class Board extends React.Component{
             style={{
               textAlign: 'center',
               fontSize: '3em',
-              marginTop: '0px'}} >
-              {this.formatTime(this.props.timer)}
-            </h2>
+              marginTop: '0px',
+            }} >
+            {this.formatTime(this.props.timer)}
+          </h2>
           <table>
             <tbody>
               {this.props.spaces.map((row, i) => <tr key={i}>{row}</tr>)}

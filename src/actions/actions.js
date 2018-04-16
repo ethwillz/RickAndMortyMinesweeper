@@ -41,7 +41,7 @@ export function checkIfWon(){
   return (dispatch, getState) => {
     const { bombsRemaining } = getState();
     if(bombsRemaining === 0){
-      dispatch(push('/EndGame/win'));
+      dispatch(push('/end/win'));
       dispatch(stopTimer());
     }
   }

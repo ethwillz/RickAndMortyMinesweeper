@@ -42,7 +42,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={DifficultySelection}/>
         <Route path="/play" component={Board}/>
-        <Route path="/EndGame/:res" component={EndGame} />
+        <Route path="/end/:res" component={EndGame} />
       </div>
     </ConnectedRouter>
   </Provider>,

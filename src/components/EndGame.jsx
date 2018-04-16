@@ -10,10 +10,14 @@ export default class EndGame extends React.Component{
 
   constructor(props){
     super(props);
+
     this.onClick = this.onClick.bind(this);
     this.updateInput = this.updateInput.bind(this);
 
-    this.state = Object.assign({}, this.state, {imgFaded: false})
+    this.state = Object.assign({}, this.state, {
+      imgFaded: false,
+      scoreSubmitFaded: false,
+    });
 
     this.img = loss;
     this.didWin = 'none';
@@ -50,7 +54,9 @@ export default class EndGame extends React.Component{
   }
 
   onClick(){
-    this.props.submitScore(this.props.timer, this.name, this.country)
+    console.log(this.props);
+    this.props.submitScore(this.name, this.props.timer, this.country);
+    this.setState({scoreSubmitFaded: true});
   }
 
   updateInput(evt){
@@ -66,11 +72,22 @@ export default class EndGame extends React.Component{
         }
     `;
 
+    let submitClass = '';
+    if(this.state.imgFaded) submitClass = 'fadeInSlow';
+    if(this.state.scoreSubmitFaded) submitClass = 'fadeOut';
+
+
+    let againClass = '';
+    if(this.state.scoreSubmitFaded && this.didWin === 'flex') againClass = 'fadeIn';
+    else if(this.state.imgFaded && this.didWin === 'none') againClass = 'fadeIn';
+
+    let tableMarginLeft = '7vw';
+    if(this.didWin === 'none') tableMarginLeft = '-4vw';
+
     return (
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
@@ -80,7 +97,9 @@ export default class EndGame extends React.Component{
           style={{position: 'absolute', width: '100vw', height: '100vh'}}
           src={this.img}
           alt='bs' />
-        <table style={{visibility: 'hidden', marginBottom: '8vh'}} className={this.state.imgFaded ? 'fadeIn' : ''}>
+        <table
+          style={{visibility: 'hidden', marginBottom: '4vh', marginLeft: tableMarginLeft,}}
+          className={this.state.imgFaded ? 'fadeIn' : ''} >
           <tbody>
             {this.topScoresInfo
               .sort((a,b) => a.score - b.score)
@@ -109,18 +128,27 @@ export default class EndGame extends React.Component{
           }
           </tbody>
         </table>
-        <div style={{display: this.didWin}}>
-          <h2>{this.props.timer}</h2>
-          <input onChange={this.updateInput} placeholder='Name'></input>
-          <button onClick={this.onClick}>Submit Score</button>
+        <div
+          className={submitClass}
+          style={{
+            marginLeft: '5vw',
+            display: this.didWin,
+            marginBottom: '4vh',
+            flexDirection: 'column'}} >
+          <h2 style={{fontSize: '10vh', textAlign: 'center', marginTop: '0', marginBottom: '2vh'}} className={submitClass}>{this.props.timer}</h2>
+          <div className={submitClass} style={{display: 'flex'}}>
+            <h2 style={{marginRight: '2vw', fontSize: '4vh'}}>Name: </h2>
+            <input className={submitClass + ' submitScoreInput'} onChange={this.updateInput}></input>
+          </div>
+          <button className={submitClass + ' submitScoreButton'} onClick={this.onClick}>Submit Score</button>
         </div>
         <h2
-          className={this.state.imgFaded ? 'fadeIn' : ''}
+          className={againClass}
           style={{
+            marginLeft: '5vw',
             fontSize: '5vw',
             margin: '0',
-            visibility: 'hidden'
-          }} >
+            visibility: 'hidden'}} >
           <StyledLink to='/'>Play again?</StyledLink>
         </h2>
       </div>
