@@ -1,6 +1,15 @@
 import React from'react';
-import { SET_SPACE_STATE, SET_BOARD_SIZE, GENERATE_BOARD, SpaceStates } from '../actions/actions';
+import {
+  SET_SPACE_STATE,
+  SET_BOARD_SIZE,
+  GENERATE_BOARD,
+  START_TIMER,
+  TIMER_TICK,
+  STOP_TIMER,
+  SEND_SCORE_TO_DB,
+  SpaceStates } from '../actions/actions';
 import Space from '../containers/Space';
+import * as firebase from 'firebase';
 
 /*
   If a space isn't touching any bombs then all spaces it can "reach" which aren't
@@ -17,9 +26,10 @@ function propogateZeros(id, size, spaces, state){
     let tempY = y + dir[0];
     let tempX = x + dir[1];
     while(tempY < spaces.length && tempY > -1 && tempX < spaces.length && tempX > -1){
-      if(spaces[tempY][tempX].props.adjacentBombs === 0
+      if((spaces[tempY][tempX].props.adjacentBombs === 0
         && !spaces[tempY][tempX].props.hasBomb
-        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
+        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED)){
+
 
         spaces[tempY][tempX] = <Space
           id={spaces[tempY][tempX].props.id}
@@ -30,14 +40,27 @@ function propogateZeros(id, size, spaces, state){
           spaceState={SpaceStates.IS_UNCOVERED} />
 
         spacesToCheckFromAgain.push(spaces[tempY][tempX]);
+
         tempY += dir[0];
         tempX += dir[1];
+        continue;
       }
-      else break;
+      else if(spaces[tempY][tempX].props.adjacentBombs !== 0
+        && !spaces[tempY][tempX].props.hasBomb
+        && spaces[tempY][tempX].props.spaceState !== SpaceStates.IS_UNCOVERED){
+          spaces[tempY][tempX] = <Space
+            id={spaces[tempY][tempX].props.id}
+            key={state.idGenerator++}
+            adjacentBombs={spaces[tempY][tempX].props.adjacentBombs}
+            hasBomb={spaces[tempY][tempX].props.hasBomb}
+            boardSize={spaces[tempY][tempX].props.boardSize}
+            spaceState={SpaceStates.IS_UNCOVERED} />
+        }
+      break;
     }
   });
 
-  spacesToCheckFromAgain.forEach(space => propogateZeros(space.props.id, size, spaces, state));
+  spacesToCheckFromAgain.forEach((space) => propogateZeros(space.props.id, size, spaces, state));
 
   return spaces;
 }
@@ -74,13 +97,13 @@ function generateBoard(state, id, size){
       lim = .16;
       break
     case 12:
-      lim = .26;
+      lim = .20;
       break;
     case 15:
-      lim = .41;
+      lim = .25;
       break;
     default:
-      lim = .61;
+      lim = .30;
       break;
   }
 
@@ -91,7 +114,7 @@ function generateBoard(state, id, size){
   let bombsPlaced = 0;
   for(let i = 0; i < size; i++){
     for(let j = 0; j < size; j++){
-      if(Math.random() < lim && (i !== y || j !== x)){
+      if(Math.random() < lim && Math.sqrt(Math.pow((j - x), 2) + Math.pow((i - y), 2)) > 2){
         spaces[i][j] = <Space
           id={i * size + j}
           key={state.idGenerator++}
@@ -141,11 +164,13 @@ function board(state = { idGenerator: 0 }, action){
       let y = parseInt(action.id / action.size, 10);
       let spaces = [...state.spaces];
 
-      if(action.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
-        state.bombsRemaining--;
+      if(action.spaceState === SpaceStates.IS_FLAGGED){
+        if(spaces[y][x].props.hasBomb)
+          state.bombsRemaining--;
       }
-      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED && spaces[y][x].props.hasBomb){
-        state.bombsRemaining++;
+      if(spaces[y][x].props.spaceState === SpaceStates.IS_FLAGGED){
+        if(spaces[y][x].props.hasBomb)
+          state.bombsRemaining++;
       }
 
       spaces[y][x] = <Space
@@ -177,7 +202,32 @@ function board(state = { idGenerator: 0 }, action){
       return Object.assign({}, state, {spaces: spaces});
     case GENERATE_BOARD:
       let boardInfo = generateBoard(state, action.id, action.boardSize);
-      return Object.assign({}, state, {spaces: boardInfo[0], bombsRemaining: boardInfo[1]});
+      return Object.assign({}, state, {
+        spaces: boardInfo[0],
+        bombsRemaining: boardInfo[1],
+      });
+    case START_TIMER:
+      return Object.assign({}, state, {timer: action.timer, interval: action.interval});
+    case TIMER_TICK:
+      let timer = state.timer;
+      timer++;
+      return Object.assign({}, state, {timer: timer});
+    case STOP_TIMER:
+      clearInterval(state.interval);
+      return Object.assign({}, state, {interval: undefined});
+    case SEND_SCORE_TO_DB:
+      firebase.firestore().collection('scores').add({
+        name: action.name,
+        score: action.score,
+        country: action.country,
+      })
+      .then((docRef) => {
+        console.log('Score added with id ' + docRef.id)
+      })
+      .catch((error) => {
+        console.log('Error with adding score: ' + error);
+      });
+      return state;
     default:
       return state;
   }

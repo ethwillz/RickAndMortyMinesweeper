@@ -12,7 +12,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       else{
 
         if(e.type === 'contextmenu'){
-          console.log(ownProps);
           if(ownProps.spaceState === SpaceStates.IS_COVERED){
             dispatch(setSpaceState(ownProps.id, ownProps.boardSize, SpaceStates.IS_FLAGGED));
             dispatch(checkIfWon());
@@ -22,7 +21,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           }
         }
         else if(ownProps.spaceState === SpaceStates.IS_COVERED && ownProps.hasBomb){
-          dispatch(push('EndGame/loss'));
+          dispatch(push('end/loss'));
         }
         else if(ownProps.spaceState === SpaceStates.IS_COVERED){
           dispatch(setSpaceState(ownProps.id, ownProps.boardSize, SpaceStates.IS_UNCOVERED));

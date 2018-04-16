@@ -16,7 +16,59 @@ body {
   font-family: rickAndMorty;
 }
 
-h2, a {
+h2, a, .submitScoreButton, .submitScoreInput {
   color: #4badc8;
   text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+}
+
+.submitScoreButton{
+    font-family: rickAndMorty;
+    border: none;
+    font-size: 4vh;
+    padding: .7em;
+    background: transparent;
+    text-decoration: none;
+}
+
+.submitScoreInput{
+  background: transparent;
+  font-family: rickAndMorty;
+  border: none;
+  margin-top: .5em;
+  font-size: 4vh;
+  padding:0;
+  line-height:65px;
+  height:65px;
+}
+
+.submitScoreInput::-webkit-input-placeholder {
+    color: #4badc8;
+    text-shadow: -1px 0 #7df24b, 0 1px #7df24b, 1px 0 #7df24b, 0 -1px #7df24b;
+    -webkit-text-fill-color: initial;
+}
+
+.submitScoreButton:focus, .submitScoreInput:focus {outline:0;}
+
+.fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1.2s, opacity 1.2s linear;
+}
+
+.fadeIn {
+  visibility: visible !important;
+  opacity: 1;
+  transition: visibility 0s 1.2s, opacity 1.2s linear;
+}
+
+.fadeInSlow {
+  visibility: visible !important;
+  opacity: 1;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.fadeOutSloe {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
 }
