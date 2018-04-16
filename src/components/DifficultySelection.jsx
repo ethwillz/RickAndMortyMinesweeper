@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 export default class DifficultySelection extends React.Component{
 
@@ -12,7 +13,12 @@ export default class DifficultySelection extends React.Component{
 
   render(){
     return (
-      <div>
+      <CSSTransitionGroup
+          transitionName="comp"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300} >
         <h2 style={{textAlign: 'center', fontSize: '300%'}}>Select your difficulty</h2>
         <div
           style={{
@@ -28,7 +34,7 @@ export default class DifficultySelection extends React.Component{
           <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Hard</h2>
           <h2 style={{cursor: 'pointer', flex: '1', fontSize: '250%'}} onClick={this.onClick}>Extreme</h2>
         </div>
-      </div>
+      </CSSTransitionGroup>
     )
   }
 }

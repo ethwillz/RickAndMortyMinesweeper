@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Ad from './Ad';
+import { CSSTransitionGroup } from 'react-transition-group';
 
 export default class Board extends React.Component{
 
@@ -32,25 +33,32 @@ export default class Board extends React.Component{
 
   render(){
     return (
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <Ad />
-        <div style={{display: 'flex', flexDirection: 'column'}}>
-          <h2
-            style={{
-              textAlign: 'center',
-              fontSize: '3em',
-              marginTop: '0px',
-            }} >
-            {this.formatTime(this.props.timer)}
-          </h2>
-          <table>
-            <tbody>
-              {this.props.spaces.map((row, i) => <tr key={i}>{row}</tr>)}
-            </tbody>
-          </table>
+      <CSSTransitionGroup
+          transitionName="comp"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300} >
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <Ad />
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <h2
+              style={{
+                textAlign: 'center',
+                fontSize: '3em',
+                marginTop: '0px',
+              }} >
+              {this.formatTime(this.props.timer)}
+            </h2>
+            <table>
+              <tbody>
+                {this.props.spaces.map((row, i) => <tr key={i}>{row}</tr>)}
+              </tbody>
+            </table>
+          </div>
+          <Ad />
         </div>
-        <Ad />
-      </div>
+      </CSSTransitionGroup>
     )
   }
 }
