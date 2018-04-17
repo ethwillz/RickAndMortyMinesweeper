@@ -32,16 +32,17 @@ export default class FinalAction extends React.Component{
                 marginRight: '2vw', }} >
                 Name:
             </h2>
-            <input className={'submitScoreInput'} onChange={this.updateInput} />
+            <input className={'submitScoreInput'} onChange={this.props.updateInput} />
           </div>
-          <button className={'submitScoreButton'} onClick={this.onClick}>Submit Score</button>
+          <button className={'submitScoreButton'} onClick={this.props.onClick}>Submit Score</button>
         </div>
         <h2
           className={this.props.promptClass}
           style={{
             position: 'absolute',
-            fontSize: '10vh', }} >
-          <StyledLink to='/'>Play again?</StyledLink>
+            fontSize: '7vh',
+            width: '10vh', }} >
+          <StyledLink to='/'>Play again</StyledLink>
         </h2>
       </div>
     )

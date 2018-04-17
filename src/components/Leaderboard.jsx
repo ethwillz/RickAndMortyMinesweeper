@@ -18,7 +18,7 @@ export default class LeaderBoard extends React.Component{
             .slice(0, 11)
             .map((scoreInfo, i) => {
               if(i === 0){
-                tdStyle.fontSize = '4vw'
+                tdStyle.fontSize = '3vw'
                 tdStyle.color = '#7df24b';
                 tdStyle.textShadow = '-1px 0 #4badc8, 0 1px #4badc8, 1px 0 #4badc8, 0 -1px #4badc8';
               }

@@ -50,7 +50,12 @@ export default class EndGame extends React.Component{
   }
 
   componentDidMount(){
-    setTimeout(() =>  this.setState({filterOne: true, scoreClass: 'tada'}) , 2000);
+    setTimeout(() =>  {
+      this.setState({scoreClass: 'tada'}) ;
+      setTimeout(() => {
+        this.setState({filterOne: true});
+      }, 1500);
+    }, 2000);
   }
 
   onClick(){
@@ -65,15 +70,16 @@ export default class EndGame extends React.Component{
     let leaderboardClass = 'none';
     let formClass = 'none';
     let promptClass = 'none';
+    let underImage = 'none';
     if(this.state.filterOne && !this.state.filterTwo){
+      underImage = 'flex';
       imgClass = 'animated fadeOut';
       leaderboardClass = 'animated fadeIn';
-      /*if(this.didWin) formClass = 'animated fadeIn';
-      else promptClass = 'animated fadeIn';*/
-      formClass = 'animated fadeOut';
-      promptClass = 'animated fadeIn';
+      if(this.didWin) formClass = 'animated fadeIn';
+      else promptClass = 'animated fadeIn';
     }
     else if(this.state.filterOne && this.state.filterTwo){
+      underImage = 'flex';
       imgClass = 'none';
       leaderboardClass = 'animated fadeIn';
       formClass = 'animated fadeOut';
@@ -95,13 +101,22 @@ export default class EndGame extends React.Component{
         <img
           className={imgClass}
           style={{
-            position: 'absolute',
             width: '100vw',
-            height: '100vh', }}
+            height: '100vh',
+            display: imgClass === 'block' ? 'block' : 'none'}}
           src={this.img}
           alt='bs' />
-        <Leaderboard style={{}} className={leaderboardClass} topScores={this.topScores}/>
-        <FinalAction style={{position: 'absolute'}} formClass={formClass} promptClass={promptClass} scoreClass={this.state.scoreClass} />
+        <div style={{display: underImage, width: '80vw' }}>
+          <Leaderboard style={{flex: '4'}} className={leaderboardClass} topScores={this.topScores}/>
+          <FinalAction
+            style={{flex: '1'}}
+            formClass={formClass}
+            promptClass={promptClass}
+            scoreClass={this.state.scoreClass}
+            timer={this.props.timer}
+            onClick={this.onClick}
+            updateInput={this.updateInput} />
+        </div>
       </CSSTransitionGroup>
     )
   }
