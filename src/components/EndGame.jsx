@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import win from '../images/win.gif';
 import loss from '../images/loss.gif';
-import styled from 'styled-components';
 import * as firebase from 'firebase';
 import axios from 'axios';
 import { CSSTransitionGroup } from 'react-transition-group';
 import Leaderboard from './Leaderboard';
+import FinalAction from './FinalAction';
 
 export default class EndGame extends React.Component{
 
@@ -19,11 +18,14 @@ export default class EndGame extends React.Component{
     this.state = {
       filterOne: false,
       filterTwo: false,
+      scoreClass: '',
     }
 
     this.img = loss;
+    this.didWin = false;
     if(this.props.match.params.res === 'win'){
       this.img = win;
+      this.didWin = true;
     }
 
     this.topScores = [{name: 'NAME', score: 'SCORE', country: 'COUNTRY'}];
@@ -38,9 +40,9 @@ export default class EndGame extends React.Component{
       });
     });
 
-    axios.get('https://api.ipstack.com/129.186.248.1?access_key=cc1cba0327d9a91277e3a5ddba1bc7ce')
+    axios.get('https://ipapi.co/8.8.8.8/json/')
     .then(response => {
-      this.country = response.data.country_code;
+      this.country = response.data.country;
     })
     .catch((error) => {
       console.log('Error getting country: ' + error);
@@ -48,7 +50,7 @@ export default class EndGame extends React.Component{
   }
 
   componentDidMount(){
-    setTimeout(() =>  this.setState({filterOne: true}) , 2000);
+    setTimeout(() =>  this.setState({filterOne: true, scoreClass: 'tada'}) , 2000);
   }
 
   onClick(){
@@ -59,84 +61,48 @@ export default class EndGame extends React.Component{
   updateInput(evt){ this.name= evt.target.value; }
 
   render(){
-    const StyledLink = styled(Link)`
-        text-decoration: none;
-
-        &:focus, &:hover, &:visited, &:link, &:active {
-            text-decoration: none;
-        }
-    `;
-
-    let imgDisplayed = 'block';
-    let leaderboardDisplayed = 'none';
-    let formDisplayed = 'none';
-    let promptDisplayed = 'none';
+    let imgClass = 'block';
+    let leaderboardClass = 'none';
+    let formClass = 'none';
+    let promptClass = 'none';
     if(this.state.filterOne && !this.state.filterTwo){
-      imgDisplayed = 'none';
-      leaderboardDisplayed = 'block';
-      if(this.didWin) this.formDisplayed = 'block';
-      else promptDisplayed = 'block';
+      imgClass = 'animated fadeOut';
+      leaderboardClass = 'animated fadeIn';
+      /*if(this.didWin) formClass = 'animated fadeIn';
+      else promptClass = 'animated fadeIn';*/
+      formClass = 'animated fadeOut';
+      promptClass = 'animated fadeIn';
     }
     else if(this.state.filterOne && this.state.filterTwo){
-      imgDisplayed = 'none';
-      leaderboardDisplayed = 'block';
-      promptDisplayed = 'block';
+      imgClass = 'none';
+      leaderboardClass = 'animated fadeIn';
+      formClass = 'animated fadeOut';
+      promptClass = 'animated fadeIn';
     }
 
     return (
       <CSSTransitionGroup
-          transitionName="comp"
-          transitionAppear={true}
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500} >
-        <div
+        transitionName="comp"
+        transitionAppear={true}
+        transitionAppearTimeout={500}
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative', }} >
+        <img
+          className={imgClass}
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative' }} >
-          <img
-            style={{
-              position: 'absolute',
-              width: '100vw',
-              height: '100vh',
-              display: imgDisplayed }}
-            src={this.img}
-            alt='bs' />
-          <Leaderboard style={{display: leaderboardDisplayed}} topScores={this.topScores}/>
-          <div
-            style={{
-              marginLeft: '5vw',
-              display: formDisplayed,
-              marginBottom: '4vh',
-              flexDirection: 'column'}} >
-            <h2 style={{
-                fontSize: '10vh',
-                textAlign: 'center',
-                marginTop: '0',
-                marginBottom: '2vh'}}>
-                {this.props.timer}
-            </h2>
-            <div style={{display: 'flex'}}>
-              <h2 style={{
-                  marginRight: '2vw',
-                  fontSize: '4vh'}} >
-                  Name:
-              </h2>
-              <input className={'submitScoreInput'} onChange={this.updateInput} />
-            </div>
-            <button className={'submitScoreButton'} onClick={this.onClick}>Submit Score</button>
-          </div>
-          <h2
-            style={{
-              fontSize: '5vw',
-              margin: '0',
-              display: promptDisplayed}} >
-            <StyledLink to='/'>Play again?</StyledLink>
-          </h2>
-        </div>
-    </CSSTransitionGroup>
+            position: 'absolute',
+            width: '100vw',
+            height: '100vh', }}
+          src={this.img}
+          alt='bs' />
+        <Leaderboard style={{}} className={leaderboardClass} topScores={this.topScores}/>
+        <FinalAction style={{position: 'absolute'}} formClass={formClass} promptClass={promptClass} scoreClass={this.state.scoreClass} />
+      </CSSTransitionGroup>
     )
   }
 }

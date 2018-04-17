@@ -58,6 +58,14 @@ h2, a, .submitScoreButton, .submitScoreInput {
 
 .submitScoreButton:focus, .submitScoreInput:focus {outline:0;}
 
+.none{
+  display: none;
+}
+
+.block{
+  display: block;
+}
+
 .comp-appear {
   opacity: 0.01;
 }

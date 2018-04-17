@@ -11,7 +11,8 @@ import thunk from 'redux-thunk';
 // components
 import DifficultySelection from './containers/DifficultySelection';
 import Board from './containers/Board';
-import EndGame from './containers/EndGame'
+import EndGame from './containers/EndGame';
+import FinalAction from './components/FinalAction';
 
 // other files
 import registerServiceWorker from './registerServiceWorker';
@@ -43,6 +44,7 @@ ReactDOM.render(
         <Route exact path="/" component={DifficultySelection}/>
         <Route path="/play" component={Board}/>
         <Route path="/end/:res" component={EndGame} />
+        <Route path="/test/fa" component={FinalAction} />
       </div>
     </ConnectedRouter>
   </Provider>,
