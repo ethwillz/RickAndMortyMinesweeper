@@ -14,6 +14,7 @@ export default class LeaderBoard extends React.Component{
       <table>
         <tbody>
           {this.props.topScores
+            .filter(score => score.boardSize === this.props.boardSize)
             .sort((a,b) => a.score - b.score)
             .slice(0, 11)
             .map((scoreInfo, i) => {

@@ -28,7 +28,7 @@ export default class EndGame extends React.Component{
       this.didWin = true;
     }
 
-    this.topScores = [{name: 'NAME', score: 'SCORE', country: 'COUNTRY'}];
+    this.topScores = [{name: 'NAME', score: 'SCORE', country: 'COUNTRY', boardSize: this.props.boardSize}];
     firebase.firestore().collection('scores').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         let data = doc.data();
@@ -36,6 +36,7 @@ export default class EndGame extends React.Component{
           name: data.name,
           score: data.score,
           country: data.country,
+          boardSize: data.boardSize,
         });
       });
     });
@@ -107,7 +108,11 @@ export default class EndGame extends React.Component{
           src={this.img}
           alt='bs' />
         <div style={{display: underImage, width: '80vw' }}>
-          <Leaderboard style={{flex: '4'}} className={leaderboardClass} topScores={this.topScores}/>
+          <Leaderboard
+            style={{flex: '4'}}
+            className={leaderboardClass}
+            topScores={this.topScores}
+            boardSize={this.props.boardSize}/>
           <FinalAction
             style={{flex: '1'}}
             formClass={formClass}
@@ -115,7 +120,8 @@ export default class EndGame extends React.Component{
             scoreClass={this.state.scoreClass}
             timer={this.props.timer}
             onClick={this.onClick}
-            updateInput={this.updateInput} />
+            updateInput={this.updateInput}
+            boardSize={this.props.boardSize} />
         </div>
       </CSSTransitionGroup>
     )

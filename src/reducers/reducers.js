@@ -220,6 +220,7 @@ function board(state = { idGenerator: 0 }, action){
         name: action.name,
         score: action.score,
         country: action.country,
+        boardSize: state.spaces.length
       })
       .then((docRef) => {
         console.log('Score added with id ' + docRef.id)

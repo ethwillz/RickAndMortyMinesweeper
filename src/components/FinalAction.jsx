@@ -41,7 +41,9 @@ export default class FinalAction extends React.Component{
           style={{
             position: 'absolute',
             fontSize: '7vh',
-            width: '10vh', }} >
+            width: '30vh',
+            paddingLeft: '5vh',
+            textAlign: 'center', }} >
           <StyledLink to='/'>Play again</StyledLink>
         </h2>
       </div>

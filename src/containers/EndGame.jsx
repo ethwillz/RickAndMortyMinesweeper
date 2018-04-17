@@ -3,13 +3,12 @@ import EndGame from '../components/EndGame';
 import { sendScoreToDB } from '../actions/actions'
 
 const mapStateToProps = (state, ownProps) => {
-  return { timer: state.timer }
+  return { timer: state.timer, boardSize: state.spaces.length };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     submitScore: (name, score, country) => {
-      console.log(name, score, country);
       dispatch(sendScoreToDB(name, score, country));
     }
   }
