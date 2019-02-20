@@ -13,6 +13,8 @@ const store = createStore(game);
   EXTR: 60% 20x20
 */
 
+// demo
+
 class Board extends Component {
   constructor(props){
     super(props);
